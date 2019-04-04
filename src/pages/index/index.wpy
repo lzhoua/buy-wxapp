@@ -1,0 +1,172 @@
+<template>
+  <view class='p-index'>
+    <view class="idx-huigu-box">
+      <view class="huigu-text fs-46">
+        现场回顾
+      </view>
+    </view>
+    <swiper
+      class="indx-swiper-box"
+      circular="{{true}}"
+      autoplay="{{true}}"
+      previous-margin="120rpx"
+      next-margin="120rpx"
+      bindchange="bindswiperChange">
+      <block 
+        wx:for="{{imgUrls}}"
+        wx:key="{{index}}">
+        <swiper-item class="idx-swiper-item">
+          <image
+            mode="aspectFill"
+            src="{{item}}"
+            class="{{sideIndex === index ?'slide-image slide-show' : 'slide-image'}}" />
+        </swiper-item>
+      </block>
+    </swiper>
+    <!-- nav -->
+    <view class="idx-nav-box">
+      <picker
+        bindchange="bindStarChange"
+        value="{{index}}"
+        range="{{array}}"
+      >
+        <view class="city-picker fs-28">
+          明星：<text style="color: #4f52e6">{{array[StarIndex]}}</text>
+          <view class="arrows-select"></view>
+        </view>
+      </picker>
+      <picker
+        mode="region"
+        bindchange="bindRegionChange"
+        value="{{region}}"
+        custom-item="{{customItem}}"
+      >
+        <view class="city-picker fs-28">
+          城市：<text style="color: #4f52e6">{{region}}</text>
+          <view class="arrows-select"></view>
+        </view>
+      </picker>
+    </view>
+
+    <!-- list -->
+    <view class="show-box">
+      <ShowCard/>
+      <ShowCard/>
+      <ShowCard/>
+      <ShowCard/>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import ShowCard from '@/components/showCard'
+
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: '',
+    navigationBarBackgroundColor: '#4f52e6'
+  }
+  components = {
+    ShowCard
+  }
+  data = {
+    sideIndex: 0, // swiper 当前index
+    StarIndex: 0, // 明星 index
+    array: ['刘德华', '成龙', '汪峰', '张学友'],
+    imgUrls: [
+      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
+      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
+      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+    ],
+    region: '深圳',
+    customItem: '全部'
+  }
+  onLoad () {
+    // console.log('------>', setViewHeight('120px'))
+  }
+  methods = {
+    bindStarChange(e) {
+      this.StarIndex = e.detail.value
+    },
+    bindswiperChange (e) {
+      this.sideIndex = e.detail.current
+      this.$apply()
+    },
+    bindRegionChange(e) {
+      let region = e.detail.value[1] === '全部'
+      ? e.detail.value[0]
+      : e.detail.value[1]
+      this.region = region
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  // background-color: #f5f3fa;
+}
+.p-index {
+  position: relative;
+  .idx-huigu-box {
+    width: 750rpx;
+    height: 260rpx;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+    background-color: #4f52e6;
+    .huigu-text {
+      color: #fff;
+    }
+  }
+  .indx-swiper-box {
+    width: 750rpx;
+    height: 320rpx;
+    position: absolute;
+    top: 100rpx;
+    left: 0rpx;
+    .idx-swiper-item {
+      width: 750rpx;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .slide-image {
+      width: 520rpx;
+      height: 100%;
+      border-radius: 8rpx;
+      transform: scale(0.8);
+      transition: transform .5s;
+    }
+    .slide-show {
+      transform: scale(1)
+    }
+  }
+  .idx-nav-box {
+    width: 750rpx;
+    height: 60rpx;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+    position: relative;
+    top: 200rpx;
+    display: flex;
+    .city-picker {
+      min-width: 30rpx;
+      height: 60rpx;
+      line-height: 60rpx;
+      margin-right: 40rpx;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .show-box {
+    width: 750rpx;
+    min-height: 400rpx;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+    position: relative;
+    top: 250rpx;
+  }
+}
+</style>

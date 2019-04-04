@@ -1,0 +1,121 @@
+<style lang="scss">
+ @import './assets/style/comm.scss';
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+import { login } from './utils/login.js'
+import { setStore } from 'wepy-redux'
+import configStore from './store'
+
+const store = configStore()
+setStore(store)
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/forum/forum',
+      'pages/singPage/singPage',
+      'pages/reply/reply',
+      'pages/good/good',
+      'pages/myCollect/myCollect',
+      'pages/article/article',
+      'pages/index/index',
+      'pages/games/games',
+      'pages/my/my',
+      'pages/publish/publish'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#8a8a8a',
+      selectedColor: '#4f52e6',
+      list: [
+        {
+          pagePath: 'pages/forum/forum',
+          text: '社区',
+          iconPath: './assets/image/forum.png',
+          selectedIconPath: './assets/image/forum-active.png'
+        },
+        {
+          pagePath: 'pages/index/index',
+          text: '现场回顾',
+          iconPath: './assets/image/huigu.png',
+          selectedIconPath: './assets/image/huigu-active.png'
+        },
+        {
+          pagePath: 'pages/games/games',
+          text: '福利游戏',
+          iconPath: './assets/image/games.png',
+          selectedIconPath: './assets/image/games-active.png'
+        },
+        {
+          pagePath: 'pages/my/my',
+          text: '我的',
+          iconPath: './assets/image/my.png',
+          selectedIconPath: './assets/image/my-active.png'
+        }
+      ]
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+    this.use('promisify')
+  }
+
+  onLaunch() {
+    this.getSys()
+    login()
+  }
+
+  /**
+   * 获取系统信息
+   */
+  async getSys () {
+    try {
+      wepy._sysInfo = await wepy.getSystemInfo()
+      // console.log('---wepy.sysInfo--->', wepy._sysInfo)
+    } catch (error) {
+      // TODO: 统一弹出框
+      console.log('------>', '获取信息失败')
+    }
+  }
+
+  // sleep (s) {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve('promise resolved')
+  //     }, s * 1000)
+  //   })
+  // }
+
+  // async testAsync () {
+  //   const data = await this.sleep(3)
+  //   console.log(data)
+  // }
+
+  // getUserInfo(cb) {
+  //   const that = this
+  //   if (this.globalData.userInfo) {
+  //     return this.globalData.userInfo
+  //   }
+  //   wepy.getUserInfo({
+  //     success (res) {
+  //       that.globalData.userInfo = res.userInfo
+  //       cb && cb(res.userInfo)
+  //     }
+  //   })
+  // }
+}
+</script>

@@ -1,0 +1,180 @@
+<template>
+  <block>
+    <view class="p-article-body">
+      <view class="artile-title fs-32">汪峰演唱会4月18号在深圳隆重开始</view>
+      <view class="author-box">
+        <view class="author-avator"></view>
+        <view class="author-name fs-28">三爷</view>
+      </view>
+      <!-- article content -->
+      <view class="fs-26 article-content">
+        <view>从1997年发行第一张专辑《鲍家街43号》至今，汪峰用他的坚持与努力成功实现了事业的三级跳。15年间，他包办了9张专辑130首歌曲的词曲创作，10次荣获最佳专辑，18首歌曲被评为年度金曲，29次荣获最佳男歌手殊荣，举办过13场超大规模演唱会。
+        2012年，汪峰在京举办了“存在”2012北京演唱会，这也使他成为了在大体育场举办个人演唱会的内地首位男歌手。那个曾经行色匆匆穿梭在北京街头的摇滚青年，而今以摇滚歌手之姿晋身整个华语主流乐坛。
+        2013年，对于汪峰来说，着实是一个忙碌的年头：不仅第一次登上了央视春晚的舞台，还被网友们评为在春节期间各大春晚出现频率最高的歌手。而对于外界质疑他作为摇滚歌手却频频出现在晚会舞台上，汪峰坦言并不介意，因为生活中的自己是一个很简单甚至有点“傻”的人，而且有时候做音乐需要承受一些委屈和压力，同时汪峰也解释了在央视春晚上的“一跪”并不是事先设计，而是当时情感的自然流露。</view>
+        <view class="article-foot">
+          <view>12-19更新</view>
+          <!-- <view class="data-num">
+            <view>123423</view>
+            <view>123423</view>
+            <view>123423</view>
+          </view> -->
+        </view>
+      </view>
+    </view>
+
+    <!-- 全部回复 -->
+    <view class="reply-warp">
+      <view class="all-reply fs-28">
+        <view class="all-line"></view>
+        全部回复
+      </view>
+      <Reply/>
+      <Reply/>
+      <Reply/>
+    </view>
+    <!-- 没有更多了 -->
+    <view class="no-more fs-28">没有更多了</view>
+
+    <view class="input-box">
+      <view
+        @tap="goPage"
+        class="el-pinut fs-28">
+        表达你的观点
+      </view>
+
+      <view class="todo-box fs-18">
+        <image class="put-icon" src="{{true ? '/assets/image/colect-active.png' : '/assets/image/colect.png'}}"/>
+        收藏
+      </view>
+      <view class="todo-box fs-18">
+        <image class="put-icon" src="/assets/image/jubao.png" />
+        举报
+      </view>
+    </view>
+  </block>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Reply from '@/components/reply'
+import router from '@/config/routes.js'
+export default class Article extends wepy.page {
+  config = {
+    navigationBarTitleText: '社区问答'
+  }
+  components = {
+    Reply
+  }
+  data = {}
+  onLoad () {
+
+  }
+  methods = {
+    goPage() {
+      wepy.navigateTo({url: router.reply})
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  background-color: #f5f3fa;
+  padding-bottom: 80rpx;
+  box-sizing: border-box;
+}
+.p-article-body {
+  background-color: #fff;
+  padding: 20rpx 40rpx;
+  .artile-title {
+    font-weight: bold;
+  }
+  .author-box {
+    display: flex;
+    align-items: center;
+    padding: 20rpx 0;
+    .author-avator {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 50%;
+      background-color: #ccc;
+      margin-right: 20rpx;
+    }
+  }
+  .article-content {
+    color: #424242;
+  }
+  .article-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40rpx;
+    .data-num {
+      display: flex;
+    }
+  }
+}
+.reply-warp {
+  width: 750rpx;
+  min-height: 100rpx;
+  margin-top: 20rpx;
+  background-color: #fff;
+  padding: 10rpx 40rpx;
+  box-sizing: border-box;
+  .all-reply {
+    display: flex;
+    align-items: center;
+    height: 80rpx;
+    color: #424242;
+    border-bottom: thin solid #ccc;
+    .all-line {
+      width: 5rpx;
+      height: 40rpx;
+      background-color: #4f52e6;
+      margin-right: 16rpx;
+    }
+  }
+}
+.no-more {
+  width: 750rpx;
+  height: 200rpx;
+  text-align: center;
+  color: #424242;
+  line-height: 200rpx;
+}
+.input-box {
+  width: 750rpx;
+  height: 100rpx;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  border-top: thin solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+  .el-pinut {
+    background-color: #f5f3fa;
+    width: 460rpx;
+    height: 70rpx;
+    border-radius: 6rpx;
+    padding: 0 20rpx;
+    display: flex;
+    align-items: center;
+    color: #bababa;
+  }
+  .todo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    .put-icon {
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+}
+</style>

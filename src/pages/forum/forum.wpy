@@ -1,0 +1,203 @@
+<template>
+  <view class='p-forum'>
+    <view class="fm-input-box">
+      <input
+        type='text'
+        confirm-type="search"
+        class="fm-input fs-28"
+        placeholder="搜索"
+        placeholder-class="placeholder-class"/>
+      <image class="search-icon" src="/assets/image/search-icon.svg"/> 
+    </view>
+    <!-- swiper -->
+    <swiper
+      class="fm-swiper"
+      indicator-dots="{{false}}"
+      autoplay="{{true}}"
+    >
+      <block wx:for="{{imgUrls}}"
+             wx:key="{{index}}">
+        <swiper-item class="fm-swiper-item">
+          <image src="{{item}}"/>
+        </swiper-item>
+      </block>
+    </swiper>
+    <!-- content -->
+    <view 
+      class="fm-content"
+      style="min-height: {{contentH}}rpx">
+      <view class="fm-tabbar">
+        <text class="fs-28 bar-active">社区问答</text>
+        <text class="fs-28">精选文章</text>
+      </view>
+
+      <repeat 
+        for="{{card}}"
+        key="index"
+        index="index"
+        item="item">
+        <ForumCard
+          :avatorUrl.sync="item.avatorUrl"
+          :nickName.sync="item.nickName"
+          :official.sync="item.official"
+          :top.sync="item.top"
+          :title.sync="item.title"
+          :content.sync="item.content"
+          :coverImage.sync="item.coverImage"/>
+      </repeat>
+    </view>
+
+    <navigator
+      url="/pages/publish/publish"
+      open-type="navigate"
+      hover-class="hover-class">
+      <image class="fa-tie" src="../../assets/image/fatie-icon.svg"/>
+    </navigator>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import ForumCard from '@/components/forumCard'
+import { setViewHeight } from '@/utils/util.js'
+
+export default class Forum extends wepy.page {
+  config = {
+    navigationBarTitleText: '社区',
+    navigationBarTextStyle: 'white',
+    navigationBarBackgroundColor: '#4f52e6'
+  }
+  components = {
+    ForumCard
+  }
+  data = {
+    contentH: 200,
+    imgUrls: [
+      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
+      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
+      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+    ],
+    card: [
+      {
+        avatorUrl: '',
+        nickName: '官方账号',
+        official: true,
+        top: true,
+        title: '汪峰演唱会4月18号在深圳隆重开始',
+        content: '汪峰啦啦啦啦啦都是是的发送到发送到发斯蒂芬是的发是的发送到发斯蒂芬水电费水电费',
+        coverImage: 'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+      },
+      {
+        avatorUrl: '',
+        nickName: '三爷',
+        official: false,
+        top: false,
+        title: '汪峰演唱会4月18号在深圳隆重开始',
+        content: '汪峰啦啦发斯蒂芬是的发是的发送到发斯蒂芬水电费水电费',
+        coverImage: ''
+      },
+      {
+        avatorUrl: '',
+        nickName: '我的名字是超级长的',
+        official: false,
+        top: false,
+        title: '汪峰演唱会',
+        content: '汪峰啦啦发斯蒂芬是的发是的发送到发斯蒂芬水电费水电费',
+        coverImage: 'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640'
+      }
+    ]
+  }
+  onLoad () {
+    this.contentH = setViewHeight('370rpx', 'rpx')
+  }
+  methods = {}
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  background-color: #4f52e6;
+}
+.p-forum {
+  & > .fm-input-box {
+    width: 750rpx;
+    height: 80rpx;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    .fm-input {
+      width: 670rpx;
+      height: 60rpx;
+      background-color: #fff;
+      border-radius: 8rpx;
+      padding-left: 65rpx;
+      box-sizing: border-box;
+    }
+    .search-icon {
+      width: 36rpx;
+      height: 36rpx;
+      position: absolute;
+      top: 22rpx;
+      left: 55rpx;
+    }
+  }
+  // ------  swiper  --------
+  & > .fm-swiper {
+    width: 670rpx;
+    height: 360rpx;
+    position: relative;
+    left: 40rpx;
+    z-index: 100;
+  }
+  .fm-swiper-item {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    & > image {
+      width: 670rpx;
+      height: 100%;
+      border-radius: 8rpx;
+    }
+  }
+  // ------  content  --------
+  .fm-content {
+    width: 750rpx;
+    background-color: #f5f3fa;
+    margin-top: -70rpx;
+    padding-top: 70rpx;
+    & > .fm-tabbar {
+      width: 750rpx;
+      height: 80rpx;
+      padding: 0 40rpx;
+      box-sizing: border-box;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      text {
+        flex: 1;
+        display: inline-block;
+        text-align: center;
+        line-height: 80rpx;
+      }
+      .bar-active {
+        color: #6257f2;
+        border-bottom: 4rpx solid #6257f2;
+      }
+    }
+  }
+  .fa-tie {
+    width: 40rpx;
+    height: 40rpx;
+    padding: 20rpx;
+    border-radius: 50%;
+    background-color: #6257f2;
+    position: fixed;
+    bottom: 30rpx;
+    right: 30rpx;
+  }
+}
+</style>

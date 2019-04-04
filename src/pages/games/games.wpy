@@ -1,0 +1,21 @@
+<template>
+  <view class='p-games'>
+    游戏
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Games extends wepy.page {
+  config = {
+    navigationBarTitleText: ''
+  }
+  data = {}
+  onLoad () {}
+  methods = {}
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+</style>

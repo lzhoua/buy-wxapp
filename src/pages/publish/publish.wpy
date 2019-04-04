@@ -1,0 +1,177 @@
+<template>
+  <view class='p-publish-body'>
+    <view class="put-box">
+      <input 
+        class="ipt-title fs-28"
+        type="text"
+        value="{{title}}"
+        placeholder="请填写标题..."
+        maxlength="20"
+        bindinput="bindTitleInput"
+        placeholder-class="placeholder-class"
+        />
+      <view class="limit-text fs-28">{{title.length}}/20</view>
+    </view>
+    <view class="ipt-content">
+      <textarea
+        value="{{content}}"
+        class="pub-textarea"
+        maxlength="500"
+        bindinput="bindContentInput"
+        placeholder="请输入您要发表的内容..."
+        placeholder-class="placeholder-class"/>
+      <view class="limit-area fs-28">{{content.length}}/500</view>
+    </view>
+    <view class="add-image">
+      <block wx:for="{{imageList}}"
+        wx:key="{{index}}">
+        <view class="img-box">
+          <image
+            mode="aspectFill"
+            class="add-icon" 
+            src="{{item}}"/>
+          <view
+            @tap="deletImage({{index}})"
+            class="delet-image-box"><text class="delet-image">x</text></view>
+        </view>
+      </block>
+      <view wx:if="{{imageList.length < 6}}" class="img-box">
+        <image
+          @tap="bindAddImage"
+          class="add-icon" 
+          src="/assets/image/add-image.svg"/>
+      </view>
+      <view></view>
+    </view>
+    <!-- 按钮 -->
+    <button hover-class="hover-class" class="public-btn fs-30">发布</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Publish extends wepy.page {
+  config = {
+    navigationBarTitleText: '发布帖子'
+  }
+  data = {
+    title: '',
+    content: '',
+    imageList: []
+  }
+  onLoad () {}
+  methods = {
+    deletImage (index) {
+      this.imageList.splice(index, 1)
+    },
+    async bindAddImage () {
+      let count = 6 - this.imageList.length
+      try {
+        let image = (await wepy.chooseImage({
+          count: count,
+          sizeType: ['compressed'],
+          sourceType: ['album', 'camera']
+        })).tempFilePaths
+        this.imageList = this.imageList.concat(image)
+        this.$apply()
+      } catch (error) {
+
+      }
+    },
+    bindTitleInput (e) {
+      this.title = e.detail.value
+    },
+    bindContentInput (e) {
+      this.content = e.detail.value
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  background-color: #ececec;
+}
+.p-publish-body {
+  .put-box {
+    position: relative;
+    .ipt-title {
+      padding: 0 90rpx 0 30rpx;
+      box-sizing: border-box;
+      width: 750rpx;
+      height: 80rpx;
+      border-bottom: thin solid #eeeeee;
+      background-color: #fff;
+    }
+    .limit-text {
+      position: absolute;
+      top: 20rpx;
+      right: 10rpx;
+      color: #999;
+    }
+  }
+  .ipt-content {
+    position: relative;
+    .pub-textarea {
+      width: 750rpx;
+      height: 400rpx;
+      background-color: #fff;
+      padding: 10rpx 30rpx 40rpx;
+      box-sizing: border-box;
+    }
+    .limit-area {
+      position: absolute;
+      bottom: 10rpx;
+      right: 10rpx;
+      color: #999999;
+    }
+  }
+  .add-image {
+    width: 750rpx;
+    padding: 0 10rpx 0 30rpx;
+    box-sizing: border-box;
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    .img-box {
+      width: 100rpx;
+      height: 100rpx;
+      border-radius: 6rpx;
+      margin: 0 10rpx 10rpx 0;
+      position: relative;
+      .delet-image-box {
+        padding: 0rpx 5rpx 0 10rpx;
+        position: absolute;
+        top: -20rpx;
+        right: -4rpx;
+        .delet-image {
+          width: 28rpx;
+          height: 28rpx;
+          display: inline-block;
+          line-height: 24rpx;
+          text-align: center;
+          font-size: 24rpx;
+          color: #fff;
+          background-color: rgba(0, 0, 0, 0.8);
+          border-radius: 50%;
+        }
+      }
+      .add-icon {
+        width: 100rpx;
+        height: 100rpx;
+      }
+    }
+  }
+  .public-btn {
+    width: 690rpx;
+    height: 80rpx;
+    background-color: #4f52e4;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40rpx;
+  }
+}
+</style>

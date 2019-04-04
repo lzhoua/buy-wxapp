@@ -1,0 +1,19 @@
+<template>
+  <view class=''></view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Good extends wepy.page {
+  config = {
+    navigationBarTitleText: '我的点赞'
+  }
+  data = {}
+  onLoad () {}
+  methods = {}
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+</style>

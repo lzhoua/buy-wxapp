@@ -1,0 +1,57 @@
+<template>
+  <view 
+    class='c-header'
+    style="margin-top: {{statusH}}px">
+    <view
+      class="h-warp"
+      style="top: {{statusH}}px; color: {{color}}; background-color: {{backgroundColor}}">
+        <view class="h-back container"></view>
+        <view class="h-title omit-text fs-32">{{title}}</view>
+      </view>
+    <view class="h-copy"></view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Header extends wepy.component {
+  data = {
+    statusH: 20,
+    title: '标题',
+    color: '#000',
+    backgroundColor: '#fff'
+  }
+  onLoad () {
+    this.statusH = wepy._sysInfo.statusBarHeight // 顶部状态栏高度
+  }
+  methods = {}
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+.c-header {
+  & > .h-warp {
+    width: 750rpx;
+    height: 85rpx;
+    position: fixed;
+    left: 0;
+    border: thin solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .h-back {
+      position: absolute;
+      left: 30rpx;
+    }
+    .h-title {
+      max-width: 300rpx;
+    }
+  }
+  .h-copy {
+    width: 750rpx;
+    height: 85rpx;
+    border: thin solid blue;
+  }
+}
+</style>

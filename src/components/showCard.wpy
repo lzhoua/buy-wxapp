@@ -1,0 +1,49 @@
+<template>
+  <view class='show-card-body' @tap="goPage">
+    <image 
+      class="show-image"
+      mode="aspectFill"
+      src="https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640"/>
+    <view class="show-card-foot fs-26">
+      <view>深圳湾体育中心</view>
+      <view>深圳市南山区滨海大道1003号</view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import router from '@/config/routes.js'
+export default class ShowCard extends wepy.component {
+  data = {}
+  onLoad () {}
+  methods = {
+    goPage () {
+      wepy.navigateTo({url: router.singPage})
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+.show-card-body {
+  border-radius: 8rpx;
+  box-shadow: 0rpx 1rpx 15rpx -2rpx #888888;
+  overflow: hidden;
+  font-size: 0rpx;
+  position: relative;
+  margin-bottom: 30rpx;
+  .show-image {
+    width: 670rpx;
+    height: 250rpx;
+  }
+  .show-card-foot {
+    position: absolute;
+    bottom: 5rpx;
+    left: 10rpx;
+    z-index: 10;
+    color: #fff;
+  }
+}
+</style>

@@ -1,0 +1,107 @@
+<template>
+  <view class='reply-box'>
+    <view class="reply-user">
+      <view class="reply-avator"></view>
+      <view class="reply-name fs-28">大范甘迪</view>
+    </view>
+    <view class="user-text fs-28">豆腐干豆腐干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼地方个梵蒂冈地方官</view>
+    <view class="foot-do fs-22">
+      <view @tap="goPage" class="do-item">
+        <image class="do-icon" src="/assets/image/reply-icon.png" /> 
+        评论
+      </view>
+      <view @tap="goodSelect" class="do-item">
+        <image class="do-icon" src="{{good ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" /> 
+        18
+      </view>
+    </view>
+    <view class="re-by-re-box">
+      <view class="byre-item fs-22">
+        <text style="color: #5069c2">三爷</text>
+        <!-- <block wx:if="{{false}}">
+          <text> 回复 </text>
+          <text style="color: #5069c2">三爷</text>
+        </block> -->
+        ：豆腐干豆腐干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼地方个梵
+      </view>
+      <view class="byre-item fs-22">
+        <text style="color: #5069c2">三爷</text>
+        <!-- <block>
+          <text> 回复 </text>
+          <text style="color: #5069c2">三爷</text>
+        </block> -->
+        ：豆腐干豆腐干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼地方个梵
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import router from '@/config/routes.js'
+export default class Reply extends wepy.component {
+  data = {
+    good: false
+  }
+  onLoad () {
+  }
+  methods = {
+    goodSelect () {
+      this.good = !this.good
+    },
+    goPage () {
+      wepy.navigateTo({url: router.reply})
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+.reply-box {
+  padding: 30rpx 0;
+  border-bottom: thin solid #ccc;
+  .reply-user {
+    display: flex;
+    align-items: center;
+    .reply-avator {
+      width: 60rpx;
+      height: 60rpx;
+      border-radius: 50%;
+      margin-right: 20rpx;
+      background-color: #ccc;
+    }
+  }
+  .user-text {
+    padding: 30rpx 0;
+  }
+  .foot-do {
+    display: flex;
+    justify-content: flex-end;
+    .do-item {
+      display: flex;
+      align-items: center;
+      margin-left: 40rpx;
+      color: #888;
+    }
+    .do-icon {
+      width: 30rpx;
+      height: 30rpx;
+      // background-color: #ccc;
+      margin-right: 5rpx;
+    }
+  }
+  .re-by-re-box {
+    width: 670rpx;
+    margin-top: 20rpx;
+    padding: 20rpx;
+    box-sizing: border-box;
+    background-color: #f5f3fa;
+    border-radius: 8rpx;
+    .byre-item {
+      color: #424242;
+      margin-top: 10rpx;
+    }
+  }
+}
+</style>

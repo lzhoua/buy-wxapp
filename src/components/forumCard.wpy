@@ -1,0 +1,131 @@
+<template>
+  <view class='c-fm-card' @tap="goPage">
+    <view class="header">
+      <image class="u-avator" src="{{avatorUrl}}"/>
+      <view class="u-title">
+        <text class="fs-28">{{nickName}}</text>
+        <view wx:if="{{official}}" class="guangfang fs-24">官</view>
+      </view>
+    </view>
+    <!-- content -->
+    <view class="fm-cd-warp">
+      <view class="cd-content">
+        <view class="cd-title fs-32 omit-two">
+          <text wx:if="{{top}}" class="text-top">[顶]</text>
+          {{title}}
+        </view>
+        <view class="content-info fs-26 omit-two">
+          {{content}}
+        </view>
+      </view>
+      <image wx:if="{{coverImage.length}}" mode="aspectFill" class="cd-cover-image" src="{{coverImage}}" />
+    </view>
+    <view class="cd-foot fs-22">
+      <text>9-25更新</text>
+      <view>
+        <text>40评论</text>
+        <text class="look">23423浏览</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import router from '@/config/routes.js'
+export default class ForumCard extends wepy.component {
+  props = {
+    avatorUrl: String,
+    nickName: String,
+    official: {
+      type: Boolean,
+      default: false
+    },
+    top: {
+      type: Boolean,
+      default: false
+    },
+    title: String,
+    content: String,
+    coverImage: String
+  }
+  data = {}
+  onLoad () {
+  }
+  methods = {
+    goPage () {
+      wepy.navigateTo({url: router.article})
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+.c-fm-card {
+  width: 750rpx;
+  min-width: 100rpx;
+  margin-top: 10rpx;
+  background-color: #fff;
+  padding: 20rpx 40rpx;
+  box-sizing: border-box;
+  & > .header {
+    display: flex;
+    align-items: center;
+    .u-avator {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 50%;
+      background-color: #ccc;
+    }
+    .u-title {
+      margin-left: 20rpx;
+      display: flex;
+    }
+    .guangfang {
+      // width: 30rpx;
+      // height: 30rpx;
+      margin-left: 10rpx;
+      color: #fff;
+      padding: 0 4rpx;
+      background-color: #4f52e6;
+      border-radius: 4rpx;
+    }
+  }
+  .fm-cd-warp {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30rpx;
+    .cd-content {
+      flex: 1;
+    }
+    .cd-title {
+      font-weight: bold;
+      .text-top {
+        color: #f83a43;
+        margin-right: 5rpx;
+      }
+    }
+    .content-info {
+      color: #a9a9a9;
+      margin-top: 30rpx;
+    }
+    .cd-cover-image {
+      width: 240rpx;
+      height: 180rpx;
+      background-color: #ccc;
+      margin-left: 5rpx;
+      border-radius: 6rpx;
+    }
+  }
+  .cd-foot {
+    margin-top: 40rpx;
+    color: #a9a9a9;
+    display: flex;
+    justify-content: space-between;
+    .look {
+      margin-left: 40rpx;
+    }
+  } 
+}
+</style>

@@ -1,0 +1,158 @@
+<template>
+  <view class='p-my'>
+    <view class="my-header">
+      <button class="avator-button"
+        open-type="getUserInfo"
+        bindgetuserinfo="bindgetuserinfo">
+        <image class="my-avator" src="{{ user.avatarUrl }}" />
+      </button>
+      <view class="my-nickname fs-30 omit-one">{{ user.nickName || '未登录' }}</view>
+      <view class="my-tie-box">
+        <view class="tie-item">
+          <text class="fs-32 tie-num">0</text>
+          <text class="fs-24 tie-type">发帖</text>
+        </view>
+        <view class="tie-item">
+          <text class="fs-32 tie-num">0</text>
+          <text class="fs-24 tie-type">回帖</text>
+        </view>
+        <view class="tie-item">
+          <text class="fs-32 tie-num">0</text>
+          <text class="fs-24 tie-type">精华</text>
+        </view>
+      </view>
+    </view>
+    <!-- list -->
+    <view class="my-list-box">
+      <navigator
+        wx:for="{{navList}}"
+        wx:key="{{index}}"
+        class="list-item"
+        open-type="navigate"
+        url="{{item.url}}"
+        hover-class="hover-class">
+        <view class="item-rg">
+          <image class="item-icon" src="{{item.icon}}"/>
+          <view class="fs-28">{{item.title}}</view>
+        </view>
+        <view class="arrows-lf"></view>
+      </navigator>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import router from '@/config/routes.js'
+export default class My extends wepy.page {
+  config = {
+    navigationBarTitleText: ''
+  }
+  data = {
+    user: {},
+    navList: [
+      {
+        icon: '../../assets/image/collect.svg',
+        title: '我的收藏',
+        url: router.myCollect
+      },
+      // {
+      //   icon: '../../assets/image/msg-icon.svg',
+      //   title: '我的消息',
+      //   url: router.myMsg
+      // },
+      {
+        icon: '../../assets/image/pinglun.svg',
+        title: '评论',
+        url: ''
+      },
+      {
+        icon: '../../assets/image/good.svg',
+        title: '点赞',
+        url: router.good
+      }
+    ]
+  }
+  onLoad () {}
+  methods = {
+    bindgetuserinfo (user) {
+      console.log('------>', user.detail)
+      this.user = user.detail.userInfo
+      this.$apply()
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  background-color: #f5f3fa;
+}
+.my-header {
+  width: 750rpx;
+  min-height: 300rpx;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+  // justify-content: center;
+  .my-avator {
+    width: 120rpx;
+    height: 120rpx;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-bottom: 20rpx;
+  }
+  .my-nickname {
+    max-width: 400rpx;
+  }
+  .my-tie-box {
+    width: 750rpx;
+    height: 100rpx;
+    margin-top: 40rpx;
+    padding: 0 80rpx;
+    box-sizing: border-box;
+    display: flex;
+    .tie-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .tie-num {
+        font-weight: bold;
+      }
+      .tie-type {
+        color: #a9a9a9;
+      }
+    }
+  }
+}
+.my-list-box {
+  width: 750rpx;
+  margin-top: 20rpx;
+  background-color: #fff;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+  .list-item {
+    width: 670rpx;
+    height: 100rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: thin solid #f5f3fa;
+    .item-rg {
+      display: flex;
+      align-items: center;
+    }
+    .item-icon {
+      width: 40rpx;
+      height: 40rpx;
+      margin-right: 30rpx;
+    }
+  }
+}
+</style>
