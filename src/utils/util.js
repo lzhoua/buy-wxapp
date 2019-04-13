@@ -22,11 +22,11 @@ export function toRpx (px) {
  * @param { string } type px | rpx
  */
 export function setViewHeight (h = '0px', type = 'px') {
-  const { windowHeight, statusBarHeight } = wepy._sysInfo
+  const { windowHeight } = wepy._sysInfo
   h = h.includes('rpx')
   ? toPx(h.replace(/rpx/, '')) * 1
   : h.replace(/px/, '') * 1
-  let result = windowHeight - statusBarHeight - h
+  let result = windowHeight - h
   return type === 'px'
     ? result
     : toRpx(result)

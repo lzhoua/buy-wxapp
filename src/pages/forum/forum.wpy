@@ -3,6 +3,8 @@
     <view class="fm-input-box">
       <input
         type='text'
+        value="{{keyword}}"
+        bindinput="bindinput"
         confirm-type="search"
         class="fm-input fs-28"
         placeholder="搜索"
@@ -26,9 +28,9 @@
     <view 
       class="fm-content"
       style="min-height: {{contentH}}rpx">
-      <view class="fm-tabbar">
-        <text class="fs-28 bar-active">社区问答</text>
-        <text class="fs-28">精选文章</text>
+      <view class="fm-tabbar" @tap="selectTabbar">
+        <text id="foumAsk" class="fs-28 {{isTabbar === 'foumAsk' ? 'bar-active' : null}}">社区问答</text>
+        <text id="foumNews" class="fs-28 {{isTabbar === 'foumNews' ? 'bar-active' : null}}">精选文章</text>
       </view>
 
       <repeat 
@@ -76,7 +78,9 @@ export default class Forum extends wepy.page {
   data = {
     contentH: 200,
     swiper: [],
-    card: []
+    card: [],
+    keyword: '',
+    isTabbar: 'foumAsk'
   }
   onLoad () {
     this.contentH = setViewHeight('370rpx', 'rpx')
@@ -95,26 +99,57 @@ export default class Forum extends wepy.page {
         this.swiper.push(obj)
       })
       this.$apply()
-      console.log('---swiper--->', this.swiper)
     } catch (error) {
-      // TODO: 错误
-      console.log('------>', error)
+      wepy.Alert.error('获取轮播图失败')
     }
   }
 
   // 获取首页列表
   async getIndexNews () {
+    wepy.Alert.loading()
     try {
       let res = await wepy.fetch({...wepy.$api.showIndexnews})
       this.card = res.data.index_news
       this.$apply()
+      wepy.hideLoading()
     } catch (error) {
-      // TODO: 错误
-      console.log('------>', error)
+      wepy.Alert.error('获取社区问答失败')
     }
   }
 
-  methods = {}
+  // 获取精选文章
+  async getChoicenessNews () {
+    wepy.Alert.loading()
+    try {
+      const res = await wepy.fetch({...wepy.$api.choicenessNews})
+      this.card = res.data.index_news
+      this.$apply()
+      wepy.hideLoading()
+    } catch (error) {
+      wepy.Alert.error('获取精选文章失败')
+    }
+  }
+
+  methods = {
+    bindinput (e) {
+      this.keyword = e.detail.value
+      this.$apply()
+    },
+    selectTabbar (e) {
+      switch (e.target.id) {
+        case 'foumAsk':
+          this.isTabbar = 'foumAsk'
+          this.getIndexNews()
+          this.$apply()
+          break
+        case 'foumNews':
+          this.isTabbar = 'foumNews'
+          this.getChoicenessNews()
+          this.$apply()
+          break
+      }
+    }
+  }
   watch = {}
 }
 </script>

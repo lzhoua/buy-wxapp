@@ -1,0 +1,143 @@
+<template>
+  <view class='p-search'>
+    <view class="fm-input-box">
+      <input
+        type='text'
+        value="{{keyword}}"
+        bindinput="bindinput"
+        confirm-type="search"
+        class="fm-input fs-28"
+        placeholder="搜索"
+        placeholder-class="placeholder-class"/>
+      <image class="search-icon" src="/assets/image/search-icon.svg"/> 
+    </view>
+
+    <block>
+      <view wx:if="{{!card.length}}" class="no-data fs-28">
+        没有搜索到任何内容~
+      </view>
+      <scroll-view
+        wx:else
+        scroll-y
+        class="scroll-view"
+        style="height: {{height}}px">
+        <repeat 
+          for="{{card}}"
+          key="index"
+          index="index"
+          item="item">
+          <ForumCard
+            :creatTime.sync="item.tiezi_data.time"
+            :avatorUrl.sync="item.user.avatarUrl"
+            :nickName.sync="item.user.nickName"
+            :official.sync="item.official"
+            :top.sync="item.tiezi_data.top"
+            :title.sync="item.tiezi_data.title"
+            :content.sync="item.tiezi_data.content"
+            :coverImage.sync="item.tiezi_data.img1"
+            :good.sync="item.tiezi_data.good_num"
+            :comment.sync="item.tiezi_data.comment_num"/>
+        </repeat>
+        <view class="no-More">没有更多了</view>
+      </scroll-view>
+    </block>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import ForumCard from '@/components/forumCard'
+import { setViewHeight } from '@/utils/util.js'
+
+export default class Search extends wepy.page {
+  config = {
+    navigationBarTitleText: '搜索'
+  }
+  components = {
+    ForumCard
+  }
+  data = {
+    height: 300,
+    card: [],
+    keyword: ''
+  }
+  onLoad () {
+    this.height = setViewHeight('80rpx')
+    this.getIndexNews()
+  }
+  // 获取搜索列表
+  async getIndexNews (keyword) {
+    wepy.Alert.loading()
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.searchNews,
+        data: {
+          keyword: keyword
+        }
+      })
+      this.card = res.data.index_news
+      this.$apply()
+      wepy.hideLoading()
+    } catch (error) {
+      wepy.Alert.error('获取社区问答失败')
+    }
+  }
+  methods = {
+    bindinput (e) {
+      clearTimeout(this.searchTimer)
+      this.searchTimer = setTimeout(() => {
+        this.getIndexNews(e.detail.value)
+        this.keyword = e.detail.value
+        this.$apply()
+      }, 300)
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  background-color: #f5f3fa;
+}
+.p-search {
+  & > .fm-input-box {
+    width: 750rpx;
+    height: 80rpx;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #ffffff;
+    
+    .fm-input {
+      width: 670rpx;
+      height: 60rpx;
+      background-color: #eeeeee;
+      border-radius: 8rpx;
+      padding-left: 65rpx;
+      box-sizing: border-box;
+    }
+    .search-icon {
+      width: 36rpx;
+      height: 36rpx;
+      position: absolute;
+      top: 22rpx;
+      left: 55rpx;
+    }
+  }
+  .no-data {
+    width: 750rpx;
+    height: 200rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .scroll-view {
+    width: 750rpx;
+    box-sizing: border-box;
+  }
+}
+</style>

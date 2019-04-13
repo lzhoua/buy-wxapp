@@ -1,0 +1,22 @@
+<template>
+  <view class=''></view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class NoMore extends wepy.component {
+  props = {
+    text: {
+      type: String,
+      dafault: '没有更多了'
+    }
+  }
+  data = {}
+  onLoad () {}
+  methods = {}
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+</style>

@@ -20,6 +20,7 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/forum/forum',
+      'pages/search/search',
       'pages/authorization/authorization',
       'pages/singPage/singPage',
       'pages/reply/reply',

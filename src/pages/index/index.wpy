@@ -82,9 +82,7 @@ export default class Index extends wepy.page {
     region: '深圳',
     customItem: '全部'
   }
-  onLoad () {
-    // console.log('------>', setViewHeight('120px'))
-  }
+  onLoad () {}
   methods = {
     bindStarChange(e) {
       this.StarIndex = e.detail.value
