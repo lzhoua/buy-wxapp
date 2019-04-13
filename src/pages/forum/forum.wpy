@@ -55,12 +55,11 @@
       <view class="no-more">没有更多了</view>
     </view>
 
-    <navigator
-      url="/pages/publish/publish"
-      open-type="navigate"
+    <view
+      @tap="goPublic"
       hover-class="hover-class">
       <image class="fa-tie" src="../../assets/image/fatie-icon.svg"/>
-    </navigator>
+    </view>
   </view>
 </template>
 
@@ -68,6 +67,7 @@
 import wepy from 'wepy'
 import ForumCard from '@/components/forumCard'
 import { setViewHeight } from '@/utils/util.js'
+import router from '@/config/routes.js'
 
 export default class Forum extends wepy.page {
   config = {
@@ -155,6 +155,12 @@ export default class Forum extends wepy.page {
           this.$apply()
           break
       }
+    },
+    goPublic () {
+      if (!wepy.userInfo) {
+        wepy.navigateTo({url: router.authorization})
+      }
+      wepy.navigateTo({url: '/pages/publish/publish'})
     }
   }
   watch = {}

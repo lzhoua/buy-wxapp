@@ -37,6 +37,7 @@ const api = {
   getQiniuToken: createApi('/vocal/qiniuyun_uptoken/', 'GET', false), // 获取七牛云uptoken
   getComment: createApi('/news/show_mycomment/', 'GET', false), // 我的模块————获取评论过的帖子
   getMyGood: createApi('/news/show_mygood/', 'GET', false), // 我的————获取点赞帖子
+  collectTiezi: createApi('/news/collect_tiezi/', 'POST', false), // 收藏帖子
   myCollect: createApi('/news/show_mycollect/', 'GET', false), // 我的———获取收藏帖
   getReport: createApi('/news/report/', 'GET', false), // 举报接口
   setGoodComment: createApi('/news/good_formiancomment/', 'POST', false) // 为主评论点赞

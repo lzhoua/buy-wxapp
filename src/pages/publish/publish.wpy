@@ -44,7 +44,10 @@
       <view></view>
     </view>
     <!-- 按钮 -->
-    <button hover-class="hover-class" class="public-btn fs-30">发布</button>
+    <button
+      @tap="publicNews"
+      hover-class="hover-class"
+      class="public-btn fs-30">发布</button>
   </view>
 </template>
 
@@ -60,13 +63,50 @@ export default class Publish extends wepy.page {
     imageList: [],
     qiniuToken: ''
   }
-  onLoad () {}
+  onLoad () {
+    this.getQiniuToken()
+  }
+
+  // 获取七牛云token
+  async getQiniuToken () {
+    try {
+      this.qiniuToken = (await wepy.fetch({...wepy.$api.getQiniuToken})).data.uptoken
+      this.$apply()
+    } catch (error) {}
+  }
+
   methods = {
+    // 发布帖子
+    async publicNews () {
+      if (!this.title) {
+        wepy.Alert.toast('请输入标题')
+        return
+      }
+      if (!this.content) {
+        wepy.Alert.toast('内容不能为空')
+        return
+      }
+      try {
+        await wepy.fetch({
+          ...wepy.$api.writeNews,
+          data: {
+            userid: wepy.userInfo.userid,
+            title: this.title,
+            content: this.content,
+            img1: this.imageList[0],
+            img2: '',
+            img3: ''
+          }
+        })
+      } catch (error) {
+        console.log('------>', error)
+      }
+    },
     deletImage (index) {
       this.imageList.splice(index, 1)
     },
     async bindAddImage () {
-      let count = 6 - this.imageList.length
+      let count = 3 - this.imageList.length
       try {
         let image = (await wepy.chooseImage({
           count: count,
@@ -75,9 +115,7 @@ export default class Publish extends wepy.page {
         })).tempFilePaths
         this.imageList = this.imageList.concat(image)
         this.$apply()
-      } catch (error) {
-
-      }
+      } catch (error) {}
     },
     bindTitleInput (e) {
       this.title = e.detail.value
