@@ -18,7 +18,7 @@
       </view>
       <view @tap="goodSelect" id="{{item.id}}" class="do-item">
         <image class="do-icon" src="{{good !== item.id ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" /> 
-        {{item.good_num}}
+        {{item.good_num + goodNum}}
       </view>
     </view>
 
@@ -44,9 +44,26 @@ export default class Reply extends wepy.component {
     item: Object
   }
   data = {
-    good: false
+    good: false,
+    goodNum: 0
   }
   onLoad () {
+    console.log('------>', this.item)
+  }
+
+  // 点赞
+  async postGood (id, userId) {
+    try {
+      await wepy.fetch({
+        ...wepy.$api.setGoodComment,
+        data: {
+          maincomment_id: id,
+          make_good_man: userId
+        }
+      })
+    } catch (error) {
+      console.log('------>', error)
+    }
   }
   methods = {
     goodSelect (e) {

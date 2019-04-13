@@ -57,7 +57,8 @@ export default class Publish extends wepy.page {
   data = {
     title: '',
     content: '',
-    imageList: []
+    imageList: [],
+    qiniuToken: ''
   }
   onLoad () {}
   methods = {

@@ -82,7 +82,7 @@ export default class Index extends wepy.page {
   data = {
     sideIndex: 0, // swiper 当前index
     starIndex: 0, // 明星 index
-    singgers: ['全部', '许巍', '刘德华', '成龙', '汪峰', '张学友'],
+    singgers: ['全部'],
     swiperList: [],
     showCards: [],
     region: '全部',
@@ -91,7 +91,16 @@ export default class Index extends wepy.page {
   onLoad () {
     this.getShowSwiper()
     this.getSearchShow('全部', '全部')
-    // this.getAllShow()
+    this.getSingger()
+  }
+
+  async getSingger() {
+    try {
+      let res = (await wepy.fetch({...wepy.$api.vocalsing})).data
+      res.singger.unshift('全部')
+      this.singgers = res.singger
+      this.$apply()
+    } catch (error) {}
   }
 
   // 获取所有演唱会
