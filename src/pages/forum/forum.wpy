@@ -15,10 +15,10 @@
       indicator-dots="{{false}}"
       autoplay="{{true}}"
     >
-      <block wx:for="{{imgUrls}}"
+      <block wx:for="{{swiper}}"
              wx:key="{{index}}">
         <swiper-item class="fm-swiper-item">
-          <image src="{{item}}"/>
+          <image src="{{item.imagUrl}}"/>
         </swiper-item>
       </block>
     </swiper>
@@ -37,13 +37,16 @@
         index="index"
         item="item">
         <ForumCard
-          :avatorUrl.sync="item.avatorUrl"
-          :nickName.sync="item.nickName"
+          :creatTime.sync="item.tiezi_data.time"
+          :avatorUrl.sync="item.user.avatarUrl"
+          :nickName.sync="item.user.nickName"
           :official.sync="item.official"
-          :top.sync="item.top"
-          :title.sync="item.title"
-          :content.sync="item.content"
-          :coverImage.sync="item.coverImage"/>
+          :top.sync="item.tiezi_data.top"
+          :title.sync="item.tiezi_data.title"
+          :content.sync="item.tiezi_data.content"
+          :coverImage.sync="item.tiezi_data.img1"
+          :good.sync="item.tiezi_data.good_num"
+          :comment.sync="item.tiezi_data.comment_num"/>
       </repeat>
     </view>
 
@@ -72,44 +75,45 @@ export default class Forum extends wepy.page {
   }
   data = {
     contentH: 200,
-    imgUrls: [
-      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
-      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
-      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-    ],
-    card: [
-      {
-        avatorUrl: '',
-        nickName: '官方账号',
-        official: true,
-        top: true,
-        title: '汪峰演唱会4月18号在深圳隆重开始',
-        content: '汪峰啦啦啦啦啦都是是的发送到发送到发斯蒂芬是的发是的发送到发斯蒂芬水电费水电费',
-        coverImage: 'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-      },
-      {
-        avatorUrl: '',
-        nickName: '三爷',
-        official: false,
-        top: false,
-        title: '汪峰演唱会4月18号在深圳隆重开始',
-        content: '汪峰啦啦发斯蒂芬是的发是的发送到发斯蒂芬水电费水电费',
-        coverImage: ''
-      },
-      {
-        avatorUrl: '',
-        nickName: '我的名字是超级长的',
-        official: false,
-        top: false,
-        title: '汪峰演唱会',
-        content: '汪峰啦啦发斯蒂芬是的发是的发送到发斯蒂芬水电费水电费',
-        coverImage: 'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640'
-      }
-    ]
+    swiper: [],
+    card: []
   }
   onLoad () {
     this.contentH = setViewHeight('370rpx', 'rpx')
+    this.getSwiper()
+    this.getIndexNews()
   }
+
+  async getSwiper () {
+    try {
+      let res = await wepy.fetch({...wepy.$api.swipperNews})
+      res.data.index_news.map(item => {
+        let obj = {
+          imagUrl: item.tiezi_data.img1,
+          id: item.tiezi_data.tiezi_id
+        }
+        this.swiper.push(obj)
+      })
+      this.$apply()
+      console.log('---swiper--->', this.swiper)
+    } catch (error) {
+      // TODO: 错误
+      console.log('------>', error)
+    }
+  }
+
+  // 获取首页列表
+  async getIndexNews () {
+    try {
+      let res = await wepy.fetch({...wepy.$api.showIndexnews})
+      this.card = res.data.index_news
+      this.$apply()
+    } catch (error) {
+      // TODO: 错误
+      console.log('------>', error)
+    }
+  }
+
   methods = {}
   watch = {}
 }

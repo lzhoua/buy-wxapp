@@ -1,4 +1,5 @@
 const routers = {
+  authorization: 'pages/authorization/authorization',
   index: '/pages/index/index', // 现场回顾
   forum: '/pages/forum/forum', // 社区
   games: '/pages/games/games', // 游戏

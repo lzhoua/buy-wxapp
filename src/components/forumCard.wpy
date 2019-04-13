@@ -21,10 +21,10 @@
       <image wx:if="{{coverImage.length}}" mode="aspectFill" class="cd-cover-image" src="{{coverImage}}" />
     </view>
     <view class="cd-foot fs-22">
-      <text>9-25更新</text>
+      <text>{{creatTime}}更新</text>
       <view>
-        <text>40评论</text>
-        <text class="look">23423浏览</text>
+        <text>{{comment}}评论</text>
+        <text class="look">{{good}}点赞</text>
       </view>
     </view>
   </view>
@@ -47,17 +47,30 @@ export default class ForumCard extends wepy.component {
     },
     title: String,
     content: String,
-    coverImage: String
+    coverImage: String,
+    creatTime: {
+      type: String,
+      default: ''
+    },
+    comment: Number,
+    good: Number
   }
   data = {}
   onLoad () {
+    // this.time = Date.now()
+    // this.$apply()
   }
   methods = {
     goPage () {
       wepy.navigateTo({url: router.article})
     }
   }
-  watch = {}
+  watch = {
+    creatTime (val) {
+      this.creatTime = wepy.timeFormat(val, 'MM-DD')
+      this.$apply()
+    }
+  }
 }
 </script>
 

@@ -1,0 +1,73 @@
+<template>
+  <view class='authorization-body'>
+    <image class="logo" src="../../image/logo.png"/>
+    <text class="auth-title">玩转猩球</text>
+    <button class="authorizabtn"
+            open-type='getUserInfo'
+            bindgetuserinfo="bindgetuserinfo">
+      <image class="wei-chart-icon" src="../../assets/image/weixin@2x.png"/>
+    使用微信授权</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { wxLogin } from '@/utils/login.js'
+export default class Authorization extends wepy.page {
+  config = {
+    navigationBarTitleText: '授权'
+  }
+  data = {}
+  onLoad () {}
+  methods = {
+    bindgetuserinfo (user) {
+      console.log('------>', user.detail)
+      this.user = user.detail.userInfo
+      wxLogin()
+      this.$apply()
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+.authorization-body {
+  width: 750rpx;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // background-color: #161823;
+  .auth-title {
+    font-family: PingFangSC-Semibold;
+    font-size: 38rpx;
+    margin: -150rpx 0 200rpx 0;
+  }
+  .logo {
+    width: 209rpx;
+    height: 209rpx;
+    margin: -150rpx 0 200rpx 0;
+    border-radius: 50%;
+    background-color: red;
+  }
+  .wei-chart-icon {
+    width: 44rpx;
+    height: 44rpx;
+    margin-right: 10rpx;
+  }
+  .authorizabtn {
+    background-color: #3BC36B;
+    width: 642rpx;
+    height: 90rpx;
+    border-radius: 8rpx;
+    font-size: 30rpx;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -100rpx;
+  }
+}
+</style>

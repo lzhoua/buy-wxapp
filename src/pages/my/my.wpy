@@ -1,11 +1,7 @@
 <template>
   <view class='p-my'>
     <view class="my-header">
-      <button class="avator-button"
-        open-type="getUserInfo"
-        bindgetuserinfo="bindgetuserinfo">
-        <image class="my-avator" src="{{ user.avatarUrl }}" />
-      </button>
+      <image class="my-avator" src="{{ user.avatarUrl }}" />
       <view class="my-nickname fs-30 omit-one">{{ user.nickName || '未登录' }}</view>
       <view class="my-tie-box">
         <view class="tie-item">
@@ -44,6 +40,7 @@
 <script>
 import wepy from 'wepy'
 import router from '@/config/routes.js'
+
 export default class My extends wepy.page {
   config = {
     navigationBarTitleText: ''
@@ -75,11 +72,6 @@ export default class My extends wepy.page {
   }
   onLoad () {}
   methods = {
-    bindgetuserinfo (user) {
-      console.log('------>', user.detail)
-      this.user = user.detail.userInfo
-      this.$apply()
-    }
   }
   watch = {}
 }
