@@ -1,38 +1,41 @@
 <template>
   <view class='p-my'>
     <view class="my-header">
-      <image class="my-avator" src="{{ user.avatarUrl }}" />
-      <view class="my-nickname fs-30 omit-one">{{ user.nickName || '未登录' }}</view>
-      <view class="my-tie-box">
-        <view class="tie-item">
-          <text class="fs-32 tie-num">0</text>
+      <image 
+        class="my-avator"
+        @tap="goLogin"
+        src="{{ user ? user.avatarUrl : '/assets/image/icon_avatar.png' }}"/>
+      <view class="my-nickname fs-30 omit-one">{{ user.nickName || '未登录，点击头像登录' }}</view>
+      <view class="my-tie-box" @tap="goPage">
+        <view class="tie-item" data-url="">
+          <text class="fs-32 tie-num">{{user.essence_num || 0}}</text>
           <text class="fs-24 tie-type">发帖</text>
         </view>
-        <view class="tie-item">
-          <text class="fs-32 tie-num">0</text>
-          <text class="fs-24 tie-type">回帖</text>
-        </view>
-        <view class="tie-item">
-          <text class="fs-32 tie-num">0</text>
+        <view class="tie-item" data-url="">
+          <text class="fs-32 tie-num">{{user.open_num || 0}}</text>
           <text class="fs-24 tie-type">精华</text>
+        </view>
+        <view class="tie-item" data-url="">
+          <text class="fs-32 tie-num">{{user.not_read_num || 0}}</text>
+          <text class="fs-24 tie-type">消息</text>
         </view>
       </view>
     </view>
     <!-- list -->
     <view class="my-list-box">
-      <navigator
+      <view
         wx:for="{{navList}}"
-        wx:key="{{index}}"
+        wx:key="{{item.id}}"
         class="list-item"
-        open-type="navigate"
-        url="{{item.url}}"
+        @tap="goPage"
+        data-url="{{item.url}}"
         hover-class="hover-class">
         <view class="item-rg">
           <image class="item-icon" src="{{item.icon}}"/>
           <view class="fs-28">{{item.title}}</view>
         </view>
         <view class="arrows-lf"></view>
-      </navigator>
+      </view>
     </view>
   </view>
 </template>
@@ -42,36 +45,48 @@ import wepy from 'wepy'
 import router from '@/config/routes.js'
 
 export default class My extends wepy.page {
-  config = {
-    navigationBarTitleText: ''
-  }
   data = {
-    user: {},
+    user: void 0,
     navList: [
       {
         icon: '../../assets/image/collect.svg',
+        id: 'collect',
         title: '我的收藏',
         url: router.myCollect
       },
-      // {
-      //   icon: '../../assets/image/msg-icon.svg',
-      //   title: '我的消息',
-      //   url: router.myMsg
-      // },
       {
         icon: '../../assets/image/pinglun.svg',
         title: '评论',
-        url: ''
+        id: 'comment',
+        url: router.myComment
       },
       {
         icon: '../../assets/image/good.svg',
         title: '点赞',
+        id: 'good',
         url: router.good
       }
     ]
   }
-  onLoad () {}
+  onLoad () {
+    this.user = wepy.userInfo && wepy.userInfo
+  }
+  onShow () {
+    this.user = wepy.userInfo && wepy.userInfo
+  }
   methods = {
+    goPage (e) {
+      if (!wepy.userInfo) {
+        wepy.navigateTo({url: router.authorization})
+      } else {
+        wepy.navigateTo({url: e.currentTarget.dataset.url})
+      }
+    },
+    goLogin () {
+      if (!this.user) {
+        wepy.navigateTo({url: router.authorization})
+      }
+    }
   }
   watch = {}
 }
@@ -93,7 +108,7 @@ page {
   .my-avator {
     width: 120rpx;
     height: 120rpx;
-    background-color: #ccc;
+    background-color: #eeeeee;
     border-radius: 50%;
     margin-bottom: 20rpx;
   }

@@ -1,23 +1,28 @@
 <template>
   <block>
     <view class="p-article-body">
-      <view class="artile-title fs-32">汪峰演唱会4月18号在深圳隆重开始</view>
+      <view class="artile-title fs-32">{{article.title}}</view>
       <view class="author-box">
-        <view class="author-avator"></view>
-        <view class="author-name fs-28">三爷</view>
+        <image class="author-avator" src="{{article.writor_avatarUrl}}"/>
+        <view class="author-name fs-28">{{article.writor_nikename}}</view>
       </view>
       <!-- article content -->
       <view class="fs-26 article-content">
-        <view>从1997年发行第一张专辑《鲍家街43号》至今，汪峰用他的坚持与努力成功实现了事业的三级跳。15年间，他包办了9张专辑130首歌曲的词曲创作，10次荣获最佳专辑，18首歌曲被评为年度金曲，29次荣获最佳男歌手殊荣，举办过13场超大规模演唱会。
-        2012年，汪峰在京举办了“存在”2012北京演唱会，这也使他成为了在大体育场举办个人演唱会的内地首位男歌手。那个曾经行色匆匆穿梭在北京街头的摇滚青年，而今以摇滚歌手之姿晋身整个华语主流乐坛。
-        2013年，对于汪峰来说，着实是一个忙碌的年头：不仅第一次登上了央视春晚的舞台，还被网友们评为在春节期间各大春晚出现频率最高的歌手。而对于外界质疑他作为摇滚歌手却频频出现在晚会舞台上，汪峰坦言并不介意，因为生活中的自己是一个很简单甚至有点“傻”的人，而且有时候做音乐需要承受一些委屈和压力，同时汪峰也解释了在央视春晚上的“一跪”并不是事先设计，而是当时情感的自然流露。</view>
+        <view>{{article.content}}</view>
+
+        <!-- 图片 -->
+        <view class="article-imagelist">
+          <image
+            wx:for="{{imageList}}"
+            wx:key="{{index}}"
+            class="image-item"
+            mode="aspectFill"
+            @tap="showImage"
+            data-url="{{item}}"
+            src="{{item}}"/>
+        </view>
         <view class="article-foot">
-          <view>12-19更新</view>
-          <!-- <view class="data-num">
-            <view>123423</view>
-            <view>123423</view>
-            <view>123423</view>
-          </view> -->
+          <view>{{article.time}}更新</view>
         </view>
       </view>
     </view>
@@ -28,15 +33,24 @@
         <view class="all-line"></view>
         全部回复
       </view>
-      <Reply/>
-      <Reply/>
-      <Reply/>
+      <repeat 
+        for="{{article.maincomments}}"
+        key="index"
+        index="index"
+        item="item">
+        <Reply
+          :item.sync="item"
+          />
+      </repeat>
     </view>
     <!-- 没有更多了 -->
     <view class="no-more fs-28">没有更多了</view>
 
+    <!-- 评论帖子 -->
     <view class="input-box">
       <view
+        data-tiezi_id="{{article.tiezi_id}}"
+        data-to_man="{{article.userid}}"
         @tap="goPage"
         class="el-pinut fs-28">
         表达你的观点
@@ -65,13 +79,70 @@ export default class Article extends wepy.page {
   components = {
     Reply
   }
-  data = {}
-  onLoad () {
-
+  data = {
+    article: void 0,
+    newid: void 0,
+    imageList: []
   }
+
+  onLoad (query) {
+    this.getArticle(query.newid)
+  }
+
+  onShow () {
+    if (this.newid) {
+      this.getArticle(this.newid)
+    }
+  }
+
+  async getArticle (id) {
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.newsDetail,
+        data: {
+          id
+        }
+      })
+      console.log('------>', res.data.data.tiezi_data)
+      let data = res.data.data.tiezi_data
+      this.newid = id
+      this.article = data
+      let arr = []
+      Object.keys(data).map(key => {
+        if (key.search(/img/g) !== -1 && data[key].length) {
+          arr.push(data[key])
+        }
+      })
+      this.imageList = arr
+      this.$apply()
+    } catch (error) {
+
+    }
+  }
+
   methods = {
-    goPage() {
-      wepy.navigateTo({url: router.reply})
+    showImage (e) {
+      wx.previewImage({
+        current: e.target.dataset.url, // 当前显示图片的http链接
+        urls: this.imageList // 需要预览的图片http链接列表
+      })
+    },
+    goPage(e) {
+      if (!wepy.userInfo) {
+        wepy.navigateTo({url: router.authorization})
+      }
+      const data = e.currentTarget.dataset
+      const obj = {
+        type: 'article',
+        tiezi_id: data.tiezi_id,
+        to_man: data.to_man
+      }
+      let params = ''
+      Object.keys(obj).map(key => {
+        params = `${params}${key}=${obj[key]}&&`
+      })
+      params = params.slice(0, -2)
+      wepy.navigateTo({url: `${router.reply}?${params}`})
     }
   }
   watch = {}
@@ -104,6 +175,18 @@ page {
   }
   .article-content {
     color: #424242;
+  }
+  .article-imagelist {
+    width: 670rpx;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20rpx;
+    .image-item {
+      width: 120rpx;
+      height: 120rpx;
+      background-color: #ccc;
+      margin: 20rpx 30rpx 0 0;
+    }
   }
   .article-foot {
     display: flex;

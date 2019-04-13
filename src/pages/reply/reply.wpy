@@ -1,17 +1,5 @@
 <template>
   <view class='p-publish-body'>
-    <!-- <view class="put-box">
-      <input 
-        class="ipt-title fs-28"
-        type="text"
-        value="{{title}}"
-        placeholder="请填写标题..."
-        maxlength="20"
-        bindinput="bindTitleInput"
-        placeholder-class="placeholder-class"
-        />
-      <view class="limit-text fs-28">{{title.length}}/20</view>
-    </view> -->
     <view class="ipt-content">
       <textarea
         value="{{content}}"
@@ -22,7 +10,11 @@
         placeholder-class="placeholder-class"/>
       <view class="limit-area fs-28">{{content.length}}/150</view>
     </view>
-    <view class="add-image">
+    <!-- 添加图片 -->
+    <!-- <view 
+      class="add-image"
+      wx:if="{{query.type === 'article'}}"
+      >
       <block wx:for="{{imageList}}"
         wx:key="{{index}}">
         <view class="img-box">
@@ -42,9 +34,12 @@
           src="/assets/image/add-image.svg"/>
       </view>
       <view></view>
-    </view>
+    </view> -->
     <!-- 按钮 -->
-    <button hover-class="hover-class" class="public-btn fs-30">回复</button>
+    <button 
+      @tap="uesrReply"
+      hover-class="hover-class"
+      class="public-btn fs-30">回复</button>
   </view>
 </template>
 
@@ -57,11 +52,70 @@ export default class Reply extends wepy.page {
   data = {
     content: '',
     imageList: [],
-    placeholder: ''
+    placeholder: '',
+    query: void 0
   }
-  onLoad () {
-    this.placeholder = '回复三爷:'
+  onLoad (query) {
+    this.placeholder = query.type === 'user'
+    ? `回复 ${query.main_nickname}:`
+    : `请输入回帖内容`
+    this.query = query
+    this.$apply()
   }
+
+  uesrReply() {
+    if (!this.content.length) {
+      wepy.Alert.toast('请输入回复内容')
+      return
+    }
+    this.query.type === 'user'
+    ? this.setSideComment(this.query)
+    : this.setTieziComment(this.query)
+  }
+
+  // 回复帖子
+  async setTieziComment (query) {
+    wepy.Alert.loading('回复中')
+    try {
+      await wepy.fetch({
+        ...wepy.$api.mainComment,
+        data: {
+          tiezi_id: query.tiezi_id,
+          main_openor: wepy.userInfo.userid,
+          to_man: query.to_man,
+          com_content: this.content
+        }
+      })
+      wepy.Alert.success('回复成功')
+      wepy.navigateBack()
+    } catch (error) {
+      wepy.Alert.error('回复失败')
+      console.log('------>', error)
+    }
+  }
+
+  // 回复评论
+  async setSideComment (query) {
+    wepy.Alert.loading('回复中')
+    try {
+      await wepy.fetch({
+        ...wepy.$api.sideComment,
+        data: {
+          main_comment_id: query.main_comment_id,
+          tiezi_id: query.tiezi_id,
+          side_openor: wepy.userInfo.userid,
+          to_man: query.to_man,
+          side_com_content: this.content
+        }
+      })
+      wepy.Alert.success('回复成功')
+      wepy.navigateBack()
+    } catch (error) {
+      wepy.Alert.error('回复失败')
+      console.log('------>', error)
+    }
+  }
+
   methods = {
     deletImage (index) {
       this.imageList.splice(index, 1)

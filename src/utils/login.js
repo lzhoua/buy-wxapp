@@ -1,12 +1,12 @@
 import wepy from 'wepy'
 
-function getSetting(loading) {
+function getSetting() {
   return new Promise((resolve) => {
     wepy.getSetting()
       .then((res) => {
         wepy.hideLoading()
         if (res.authSetting['scope.userInfo']) {
-          loading ? null : wepy.showLoading({ // eslint-disable-line
+          wepy.showLoading({ // eslint-disable-line
             title: '登录中',
             mask: true
           })
@@ -16,36 +16,57 @@ function getSetting(loading) {
   })
 }
 
-function getLogin() {
-  return new Promise((resolve, reject) => {
-    wepy.getUserInfo().then((user) => {
-      wepy.login().then((res) => {
-        let data = {
-          code: res.code,
-          encryptedData: user.encryptedData,
-          iv: user.iv
-        }
-        resolve(data)
-      })
-      .catch(err => {
-        reject(err)
+export async function login () {
+  try {
+    await getSetting()
+    const token = (await wepy.getStorage({key: 'token'})).data
+    wepy.fetch({
+      ...wepy.$api.loginToken,
+      data: {
+        token: token
+      }
+    })
+    .then(user => {
+      const userInfo = user.data.user_data
+      wepy.userInfo = userInfo
+      console.log('----userInfo-->', userInfo)
+      wepy.setStorage({
+        key: 'token',
+        data: userInfo.token
       })
     })
-  })
+  } catch (error) {}
 }
 
-export function wxLogin (loading = true) {
-  return new Promise((resolve, reject) => {
-    Promise.all([getLogin(), getSetting(loading = true)])
-    .then((res) => {
-      wepy.fetch({...wepy.$api.wxlogin, data: res[0]})
-      .then(user => {
-        console.log('---user--->', user)
-        resolve(user)
+export function wxLogin (userInfo) {
+  return new Promise((resolve) => {
+    wepy.login().then(wx => {
+      wepy.fetch({
+        ...wepy.$api.wxlogin,
+        data: {
+          code: wx.code,
+          encryptedData: userInfo.encryptedData,
+          iv: userInfo.iv
+        }
+      })
+      .then(res => {
+        resolve(res)
+      })
+      .catch((err) => {
+        console.log('------>', err)
+        wepy.Alert.error('登录失败')
       })
     })
-    .catch(err => {
-      reject(err)
-    })
+    // Promise.all([getLogin(), getSetting(loading = true)])
+    // .then((res) => {
+    //   wepy.fetch({...wepy.$api.wxlogin, data: res[0]})
+    //   .then(user => {
+    //     console.log('---user--->', user)
+    //     resolve(user)
+    //   })
+    // })
+    // .catch(err => {
+    //   reject(err)
+    // })
   })
 }

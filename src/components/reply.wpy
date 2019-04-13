@@ -1,36 +1,36 @@
 <template>
   <view class='reply-box'>
     <view class="reply-user">
-      <view class="reply-avator"></view>
-      <view class="reply-name fs-28">大范甘迪</view>
+      <image class="reply-avator" src="{{item.from_main_avatarurl}}"/>
+      <view class="reply-name fs-28">{{item.from_main_nickname}}</view>
     </view>
-    <view class="user-text fs-28">豆腐干豆腐干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼地方个梵蒂冈地方官</view>
+    <view class="user-text fs-28">{{item.com_content}}</view>
     <view class="foot-do fs-22">
-      <view @tap="goPage" class="do-item">
+      <view
+        data-main_nickname="{{item.from_main_nickname}}"
+        data-main_comment_id="{{item.id}}"
+        data-tiezi_id="{{item.tiezi_id}}"
+        data-to_man="{{item.main_openor}}"
+        @tap="goPage"
+        class="do-item">
         <image class="do-icon" src="/assets/image/reply-icon.png" /> 
         评论
       </view>
-      <view @tap="goodSelect" class="do-item">
-        <image class="do-icon" src="{{good ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" /> 
-        18
+      <view @tap="goodSelect" id="{{item.id}}" class="do-item">
+        <image class="do-icon" src="{{good !== item.id ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" /> 
+        {{item.good_num}}
       </view>
     </view>
-    <view class="re-by-re-box">
-      <view class="byre-item fs-22">
-        <text style="color: #5069c2">三爷</text>
-        <!-- <block wx:if="{{false}}">
-          <text> 回复 </text>
-          <text style="color: #5069c2">三爷</text>
-        </block> -->
-        ：豆腐干豆腐干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼地方个梵
-      </view>
-      <view class="byre-item fs-22">
-        <text style="color: #5069c2">三爷</text>
-        <!-- <block>
-          <text> 回复 </text>
-          <text style="color: #5069c2">三爷</text>
-        </block> -->
-        ：豆腐干豆腐干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼干豆腐桂东发鬼地方个梵
+
+    <!-- 回复评论 -->
+    <view class="re-by-re-box" wx:if="{{item.sidecomments.length}}">
+      <view 
+        class="byre-item fs-22"
+        wx:for="{{item.sidecomments}}"
+        wx:for-item="side"
+        wx:key="{{side.id}}">
+        <text style="color: #5069c2">{{side.from_side_nickname}}</text>
+        ：{{side.side_com_content}}
       </view>
     </view>
   </view>
@@ -40,17 +40,37 @@
 import wepy from 'wepy'
 import router from '@/config/routes.js'
 export default class Reply extends wepy.component {
+  props = {
+    item: Object
+  }
   data = {
     good: false
   }
   onLoad () {
   }
   methods = {
-    goodSelect () {
-      this.good = !this.good
+    goodSelect (e) {
+      console.log('------>', e.currentTarget.id)
+      this.good = e.currentTarget.id * 1
     },
-    goPage () {
-      wepy.navigateTo({url: router.reply})
+    goPage (e) {
+      if (!wepy.userInfo) {
+        wepy.navigateTo({url: router.authorization})
+      }
+      const data = e.currentTarget.dataset
+      const obj = {
+        type: 'user',
+        main_nickname: data.main_nickname,
+        main_comment_id: data.main_comment_id,
+        tiezi_id: data.tiezi_id,
+        to_man: data.to_man
+      }
+      let params = ''
+      Object.keys(obj).map(key => {
+        params = `${params}${key}=${obj[key]}&&`
+      })
+      params = params.slice(0, -2)
+      wepy.navigateTo({url: `${router.reply}?${params}`})
     }
   }
   watch = {}

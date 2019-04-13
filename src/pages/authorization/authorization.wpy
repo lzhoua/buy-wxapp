@@ -21,9 +21,19 @@ export default class Authorization extends wepy.page {
   onLoad () {}
   methods = {
     bindgetuserinfo (user) {
-      console.log('------>', user.detail)
-      this.user = user.detail.userInfo
-      wxLogin()
+      if (user.detail.userInfo) {
+        wepy.Alert.loading('登录中')
+        wxLogin(user.detail)
+        .then(user => {
+          let userInfo = user.data.user_data
+          wepy.userInfo = userInfo
+          wepy.setStorage({
+            key: 'token',
+            data: userInfo.token
+          })
+          wepy.navigateBack()
+        })
+      }
       this.$apply()
     }
   }

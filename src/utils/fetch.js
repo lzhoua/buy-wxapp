@@ -4,11 +4,11 @@ function fetch ({...opt}) {
   let { url, method, token, data, header } = opt
 
   if (token) {
-    header['token'] = wepy.$token
+    header['token'] = wepy.userInfo.token
   }
 
   header = Object.assign({
-    'content-type': 'application/json'
+    'content-type': 'application/x-www-form-urlencoded'
   }, header)
 
   let OBJECT = {

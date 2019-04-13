@@ -1,21 +1,76 @@
 <template>
-  <view class=''>
-    我的收藏
+  <view>
+    <view wx:if="{{true}}" class="no-data">没有收藏</view>
+    <block wx:else>
+      <repeat
+        for="{{card}}"
+        key="index"
+        index="index"
+        item="item">
+        <ForumCard
+          :creatTime.sync="item.tiezi_data.time"
+          :avatorUrl.sync="item.user.avatarUrl"
+          :nickName.sync="item.user.nickName"
+          :official.sync="item.official"
+          :top.sync="item.tiezi_data.top"
+          :title.sync="item.tiezi_data.title"
+          :content.sync="item.tiezi_data.content"
+          :coverImage.sync="item.tiezi_data.img1"
+          :good.sync="item.tiezi_data.good_num"
+          :comment.sync="item.tiezi_data.comment_num"/>
+      </repeat>
+      <view class="no-more">没有更多了</view>
+    </block>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
+import ForumCard from '@/components/forumCard'
+
 export default class myCollect extends wepy.page {
   config = {
     navigationBarTitleText: '我的收藏'
   }
-  data = {}
-  onLoad () {}
+  components = {
+    ForumCard
+  }
+  data = {
+    card: []
+  }
+  onLoad () {
+    this.getMyCollect()
+  }
+
+  async getMyCollect () {
+    wepy.Alert.loading()
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.myCollect,
+        data: {
+          userid: wepy.userInfo.userid
+        }
+      })
+      this.card = res.data.index_news
+      this.$apply()
+    } catch (error) {}
+  }
+
   methods = {}
   watch = {}
 }
 </script>
 
 <style lang='scss'>
+page {
+  background-color: #f5f3fa;
+}
+.no-data {
+  width: 750rpx;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}
 </style>

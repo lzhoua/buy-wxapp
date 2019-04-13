@@ -10,6 +10,7 @@ import fetch from './utils/fetch.js'
 import {timeFormat} from './utils/util.js'
 import Alert from './utils/alert.js'
 import router from '@/config/routes.js'
+import { login } from './utils/login.js'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
@@ -22,6 +23,7 @@ export default class extends wepy.app {
     pages: [
       'pages/forum/forum',
       'pages/search/search',
+      'pages/myComment/myComment',
       'pages/authorization/authorization',
       'pages/singPage/singPage',
       'pages/reply/reply',
@@ -88,6 +90,7 @@ export default class extends wepy.app {
 
   async onLaunch() {
     this.getSys()
+    login()
   }
 
   /**

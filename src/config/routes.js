@@ -8,6 +8,7 @@ const routers = {
   myCollect: '/pages/myCollect/myCollect',
   singPage: '/pages/singPage/singPage',
   good: '/pages/good/good',
+  myComment: '/pages/myComment/myComment',
   reply: '/pages/reply/reply', // 回复
   article: '/pages/article/article', // 帖子
   publish: '/pages/publish/publish' // 发表

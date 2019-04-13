@@ -1,5 +1,5 @@
 <template>
-  <view class='c-fm-card' @tap="goPage">
+  <view class='c-fm-card' data-newid="{{newId}}" @tap="goPage">
     <view class="header">
       <image class="u-avator" src="{{avatorUrl}}"/>
       <view class="u-title">
@@ -37,6 +37,7 @@ export default class ForumCard extends wepy.component {
   props = {
     avatorUrl: String,
     nickName: String,
+    newId: String,
     official: {
       type: Boolean,
       default: false
@@ -61,8 +62,10 @@ export default class ForumCard extends wepy.component {
     // this.$apply()
   }
   methods = {
-    goPage () {
-      wepy.navigateTo({url: router.article})
+    goPage (e) {
+      console.log('------>', e.currentTarget.dataset.newid)
+      const id = e.currentTarget.dataset.newid
+      wepy.navigateTo({url: `${router.article}?newid=${id}`})
     }
   }
   watch = {

@@ -90,22 +90,23 @@ export default class Index extends wepy.page {
   }
   onLoad () {
     this.getShowSwiper()
-    this.getAllShow()
+    this.getSearchShow('全部', '全部')
+    // this.getAllShow()
   }
 
   // 获取所有演唱会
-  async getAllShow () {
-    wepy.Alert.loading()
-    try {
-      const res = await wepy.fetch({
-        ...wepy.$api.vocalAll
-      })
-      this.showCards = res.data.data
-      this.$apply()
-    } catch (error) {
-      wepy.Alert.error('获取演唱会失败')
-    }
-  }
+  // async getAllShow () {
+  //   wepy.Alert.loading()
+  //   try {
+  //     const res = await wepy.fetch({
+  //       ...wepy.$api.vocalAll
+  //     })
+  //     this.showCards = res.data.data
+  //     this.$apply()
+  //   } catch (error) {
+  //     wepy.Alert.error('获取演唱会失败')
+  //   }
+  // }
 
   // 获取演唱会轮播图
   async getShowSwiper () {
@@ -121,6 +122,7 @@ export default class Index extends wepy.page {
 
   // 搜索演唱会
   async getSearchShow (singger, city) {
+    wepy.Alert.loading('加载中')
     try {
       let res = await wepy.fetch({
         ...wepy.$api.vocalSearch,

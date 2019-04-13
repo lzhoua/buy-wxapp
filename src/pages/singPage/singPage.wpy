@@ -45,6 +45,7 @@ export default class SingPage extends wepy.page {
   }
 
   async getVocalDetail (id) {
+    wepy.Alert.loading()
     try {
       let res = await wepy.fetch({
         ...wepy.$api.vocalDetail,
