@@ -17,13 +17,15 @@ function fetch ({...opt}) {
     data,
     header
   }
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     wepy.request(OBJECT)
     .then((res) => {
       resolve(res)
+      wepy.hideLoading()
     })
     .catch((err) => {
-      reject(err)
+      wepy.Alert.error(err)
+      console.log(err)
     })
   })
 }

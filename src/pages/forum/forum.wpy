@@ -5,6 +5,7 @@
         type='text'
         value="{{keyword}}"
         bindinput="bindinput"
+        bindconfirm="bindconfirm"
         confirm-type="search"
         class="fm-input fs-28"
         placeholder="搜索"
@@ -50,6 +51,7 @@
           :good.sync="item.tiezi_data.good_num"
           :comment.sync="item.tiezi_data.comment_num"/>
       </repeat>
+      <view class="no-more">没有更多了</view>
     </view>
 
     <navigator
@@ -131,6 +133,10 @@ export default class Forum extends wepy.page {
   }
 
   methods = {
+    bindconfirm () {
+      wepy.Alert.loading('搜索中')
+      wepy.navigateTo({url: `${wepy.router.search}?keyword=${this.keyword}`})
+    },
     bindinput (e) {
       this.keyword = e.detail.value
       this.$apply()

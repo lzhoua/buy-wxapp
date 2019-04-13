@@ -3,10 +3,10 @@
     <image 
       class="show-image"
       mode="aspectFill"
-      src="https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640"/>
+      src="{{imageUrl}}"/>
     <view class="show-card-foot fs-26">
-      <view>深圳湾体育中心</view>
-      <view>深圳市南山区滨海大道1003号</view>
+      <view>{{site}}</view>
+      <view>{{address}}</view>
     </view>
   </view>
 </template>
@@ -15,6 +15,20 @@
 import wepy from 'wepy'
 import router from '@/config/routes.js'
 export default class ShowCard extends wepy.component {
+  props = {
+    imageUrl: {
+      type: String,
+      default: 'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640'
+    },
+    site: {
+      type: String,
+      default: '深圳湾体育中心'
+    },
+    address: {
+      type: String,
+      default: '深圳市南山区滨海大道1003号'
+    }
+  }
   data = {}
   onLoad () {}
   methods = {

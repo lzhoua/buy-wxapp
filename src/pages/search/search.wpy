@@ -38,7 +38,7 @@
             :good.sync="item.tiezi_data.good_num"
             :comment.sync="item.tiezi_data.comment_num"/>
         </repeat>
-        <view class="no-More">没有更多了</view>
+        <view class="no-more">没有更多了</view>
       </scroll-view>
     </block>
   </view>
@@ -61,13 +61,13 @@ export default class Search extends wepy.page {
     card: [],
     keyword: ''
   }
-  onLoad () {
+  onLoad (query) {
     this.height = setViewHeight('80rpx')
-    this.getIndexNews()
+    this.getSearchNews(query.keyword)
   }
   // 获取搜索列表
-  async getIndexNews (keyword) {
-    wepy.Alert.loading()
+  async getSearchNews (keyword) {
+    wepy.Alert.loading('搜索中')
     try {
       let res = await wepy.fetch({
         ...wepy.$api.searchNews,
@@ -86,7 +86,7 @@ export default class Search extends wepy.page {
     bindinput (e) {
       clearTimeout(this.searchTimer)
       this.searchTimer = setTimeout(() => {
-        this.getIndexNews(e.detail.value)
+        this.getSearchNews(e.detail.value)
         this.keyword = e.detail.value
         this.$apply()
       }, 300)

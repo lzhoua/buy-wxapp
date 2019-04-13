@@ -13,12 +13,12 @@
       next-margin="120rpx"
       bindchange="bindswiperChange">
       <block 
-        wx:for="{{imgUrls}}"
+        wx:for="{{swiperList}}"
         wx:key="{{index}}">
         <swiper-item class="idx-swiper-item">
           <image
             mode="aspectFill"
-            src="{{item}}"
+            src="{{item.little_img}}"
             class="{{sideIndex === index ?'slide-image slide-show' : 'slide-image'}}" />
         </swiper-item>
       </block>
@@ -28,10 +28,10 @@
       <picker
         bindchange="bindStarChange"
         value="{{index}}"
-        range="{{array}}"
+        range="{{singgers}}"
       >
         <view class="city-picker fs-28">
-          明星：<text style="color: #4f52e6">{{array[StarIndex]}}</text>
+          明星：<text style="color: #4f52e6">{{singgers[starIndex]}}</text>
           <view class="arrows-select"></view>
         </view>
       </picker>
@@ -50,10 +50,17 @@
 
     <!-- list -->
     <view class="show-box">
-      <ShowCard/>
-      <ShowCard/>
-      <ShowCard/>
-      <ShowCard/>
+      <repeat
+        for="{{showCard}}"
+        key="index"
+        index="index"
+        item="item">
+        <ShowCard
+          :imageUrl.sync="item.little_img"
+          :site.sync="item.project_name"
+          :address.sync="item.location"/>
+      </repeat>
+      <view class="no-more">没有更多了</view>
     </view>
   </view>
 </template>
@@ -72,20 +79,68 @@ export default class Index extends wepy.page {
   }
   data = {
     sideIndex: 0, // swiper 当前index
-    StarIndex: 0, // 明星 index
-    array: ['刘德华', '成龙', '汪峰', '张学友'],
-    imgUrls: [
-      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
-      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
-      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-    ],
-    region: '深圳',
+    starIndex: 0, // 明星 index
+    singgers: ['全部', '许巍', '刘德华', '成龙', '汪峰', '张学友'],
+    swiperList: [],
+    showCard: [],
+    region: '全部',
     customItem: '全部'
   }
-  onLoad () {}
+  onLoad () {
+    this.getShowSwiper()
+    this.getAllShow()
+  }
+
+  // 获取所有演唱会
+  async getAllShow () {
+    wepy.Alert.loading()
+    try {
+      const res = await wepy.fetch({
+        ...wepy.$api.vocalAll
+      })
+      this.showCard = res.data.data
+      this.$apply()
+    } catch (error) {
+      wepy.Alert.error('获取演唱会失败')
+    }
+  }
+
+  // 获取演唱会轮播图
+  async getShowSwiper () {
+    wepy.Alert.loading()
+    try {
+      let res = await wepy.fetch({...wepy.$api.vocalSwiper})
+      this.swiperList = res.data.data
+      this.$apply()
+    } catch (error) {
+      wepy.Alert.error('获取演唱会轮播图失败')
+    }
+  }
+
+  // 搜索演唱会
+  async getSearchShow (singger, city) {
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.vocalSearch,
+        data: {
+          singger,
+          city
+        }
+      })
+      this.showCard = res.data.data
+      this.$apply()
+      console.log('-----ddddd->', res)
+    } catch (error) {
+      wepy.Alert.error('搜索演唱会失败')
+    }
+  }
+
   methods = {
     bindStarChange(e) {
-      this.StarIndex = e.detail.value
+      this.starIndex = e.detail.value
+      const singger = this.singgers[e.detail.value]
+      console.log('------>', singger)
+      this.getSearchShow(singger, this.region)
     },
     bindswiperChange (e) {
       this.sideIndex = e.detail.current
@@ -96,6 +151,7 @@ export default class Index extends wepy.page {
       ? e.detail.value[0]
       : e.detail.value[1]
       this.region = region
+      this.getSearchShow(this.singgers[this.starIndex], this.region)
     }
   }
   watch = {}

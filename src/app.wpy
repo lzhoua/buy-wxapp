@@ -9,6 +9,7 @@ import api from './utils/api.js'
 import fetch from './utils/fetch.js'
 import {timeFormat} from './utils/util.js'
 import Alert from './utils/alert.js'
+import router from '@/config/routes.js'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
@@ -82,6 +83,7 @@ export default class extends wepy.app {
     wepy.fetch = fetch
     wepy.timeFormat = timeFormat
     wepy.Alert = Alert
+    wepy.router = router
   }
 
   async onLaunch() {
