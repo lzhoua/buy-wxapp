@@ -1,5 +1,7 @@
 <template>
-  <view class='show-card-body' @tap="goPage">
+  <view class='show-card-body'
+    data-showid="{{showId}}"
+    @tap="goPage">
     <image 
       class="show-image"
       mode="aspectFill"
@@ -16,6 +18,7 @@ import wepy from 'wepy'
 import router from '@/config/routes.js'
 export default class ShowCard extends wepy.component {
   props = {
+    showId: String,
     imageUrl: {
       type: String,
       default: 'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640'
@@ -32,8 +35,8 @@ export default class ShowCard extends wepy.component {
   data = {}
   onLoad () {}
   methods = {
-    goPage () {
-      wepy.navigateTo({url: router.singPage})
+    goPage (e) {
+      wepy.navigateTo({url: `${router.singPage}?id=${e.currentTarget.dataset.showid}`})
     }
   }
   watch = {}

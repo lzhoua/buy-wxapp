@@ -24,8 +24,8 @@ function fetch ({...opt}) {
       wepy.hideLoading()
     })
     .catch((err) => {
-      wepy.Alert.error(err)
       console.log(err)
+      wepy.hideLoading()
     })
   })
 }

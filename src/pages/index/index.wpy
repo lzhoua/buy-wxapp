@@ -51,11 +51,13 @@
     <!-- list -->
     <view class="show-box">
       <repeat
-        for="{{showCard}}"
-        key="index"
+        for="{{showCards}}"
         index="index"
-        item="item">
+        item="item"
+        key="{{item.id}}"
+        >
         <ShowCard
+          :showId.sync="item.id"
           :imageUrl.sync="item.little_img"
           :site.sync="item.project_name"
           :address.sync="item.location"/>
@@ -82,7 +84,7 @@ export default class Index extends wepy.page {
     starIndex: 0, // 明星 index
     singgers: ['全部', '许巍', '刘德华', '成龙', '汪峰', '张学友'],
     swiperList: [],
-    showCard: [],
+    showCards: [],
     region: '全部',
     customItem: '全部'
   }
@@ -98,7 +100,7 @@ export default class Index extends wepy.page {
       const res = await wepy.fetch({
         ...wepy.$api.vocalAll
       })
-      this.showCard = res.data.data
+      this.showCards = res.data.data
       this.$apply()
     } catch (error) {
       wepy.Alert.error('获取演唱会失败')
@@ -127,9 +129,8 @@ export default class Index extends wepy.page {
           city
         }
       })
-      this.showCard = res.data.data
+      this.showCards = res.data.data
       this.$apply()
-      console.log('-----ddddd->', res)
     } catch (error) {
       wepy.Alert.error('搜索演唱会失败')
     }

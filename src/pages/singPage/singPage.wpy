@@ -19,11 +19,8 @@
     </swiper>
 
     <view class="sing-conent">
-      <view class="sing-info fs-40">项目详情</view>
-      <view class="sing-text fs-30">从1997年发行第一张专辑《鲍家街43号》至今，汪峰用他的坚持与努力成功实现了事业的三级跳。15年间，他包办了9张专辑130首歌曲的词曲创作，10次荣获最佳专辑，18首歌曲被评为年度金曲，29次荣获最佳男歌手殊荣，举办过13场超大规模演唱会。
-        2012年，汪峰在京举办了“存在”2012北京演唱会，这也使他成为了在大体育场举办个人演唱会的内地首位男歌手。那个曾经行色匆匆穿梭在北京街头的摇滚青年，而今以摇滚歌手之姿晋身整个华语主流乐坛。
-        2013年，对于汪峰来说，着实是一个忙碌的年头：不仅第一次登上了央视春晚的舞台，还被网友们评为在春节期间各大春晚出现频率最高的歌手。而对于外界质疑他作为摇滚歌手却频频出现在晚会舞台上，汪峰坦言并不介意，因为生活中的自己是一个很简单甚至有点“傻”的人，而且有时候做音乐需要承受一些委屈和压力，同时汪峰也解释了在央视春晚上的“一跪”并不是事先设计，而是当时情感的自然流露。
-      </view>
+      <view class="sing-info fs-40">{{showDetail.project_name}}</view>
+      <view class="sing-text fs-30">{{showDetail.project_connect}}</view>
     </view>
   </view>
 </template>
@@ -40,9 +37,36 @@ export default class SingPage extends wepy.page {
       'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
       'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
       'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-    ]
+    ],
+    showDetail: void 0
   }
-  onLoad () {}
+  onLoad (query) {
+    this.getVocalDetail(query.id)
+  }
+
+  async getVocalDetail (id) {
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.vocalDetail,
+        data: {
+          id
+        }
+      })
+      let data = res.data.data
+      let arr = []
+      Object.keys(data).map(key => {
+        if (!key.search(/img/g)) {
+          arr.push(data[key])
+        }
+      })
+      this.imgUrls = arr
+      this.showDetail = data
+      this.$apply()
+    } catch (error) {
+      wepy.Alert.error('获取演唱会失败')
+    }
+  }
+
   methods = {
     showImage (url) {
       wepy.previewImage({
