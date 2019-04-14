@@ -21,7 +21,7 @@ function createApi(url, method = 'GET', token = false) {
 const api = {
   wxlogin: createApi('/user/getuser/', 'POST', false), // 首次登录
   loginToken: createApi('/user/gomine/', 'POST', false), // 登录
-  writeNews: createApi('/news/write_news/', 'POST', true), // 发布帖子
+  writeNews: createApi('/news/write_news/', 'POST', false), // 发布帖子
   newsDetail: createApi('/news/show_detail/', 'GET', false), // 帖子详情
   sideComment: createApi('/news/side_comment/', 'POST', false), // 副评论
   mainComment: createApi('/news/main_comment/', 'POST', false), // 主评论

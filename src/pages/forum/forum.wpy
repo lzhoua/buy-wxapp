@@ -83,12 +83,19 @@ export default class Forum extends wepy.page {
     swiper: [],
     card: [],
     keyword: '',
+    faTie: false,
     isTabbar: 'foumAsk'
   }
   onLoad () {
     this.contentH = setViewHeight('370rpx', 'rpx')
     this.getSwiper()
     this.getIndexNews()
+  }
+  onShow() {
+    if (this.faTie) {
+      this.getIndexNews()
+      this.faTie = false
+    }
   }
 
   async getSwiper () {
@@ -160,6 +167,7 @@ export default class Forum extends wepy.page {
       if (!wepy.userInfo) {
         wepy.navigateTo({url: router.authorization})
       }
+      this.faTie = true
       wepy.navigateTo({url: '/pages/publish/publish'})
     }
   }

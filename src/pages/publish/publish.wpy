@@ -15,7 +15,7 @@
     <view class="ipt-content">
       <textarea
         value="{{content}}"
-        class="pub-textarea"
+        class="pub-textarea fs-28"
         maxlength="500"
         bindinput="bindContentInput"
         placeholder="请输入您要发表的内容..."
@@ -53,6 +53,8 @@
 
 <script>
 import wepy from 'wepy'
+import Qiniu from '../../utils/qiniu.js'
+
 export default class Publish extends wepy.page {
   config = {
     navigationBarTitleText: '发布帖子'
@@ -60,19 +62,10 @@ export default class Publish extends wepy.page {
   data = {
     title: '',
     content: '',
-    imageList: [],
-    qiniuToken: ''
+    imageList: []
   }
-  onLoad () {
-    this.getQiniuToken()
-  }
-
-  // 获取七牛云token
-  async getQiniuToken () {
-    try {
-      this.qiniuToken = (await wepy.fetch({...wepy.$api.getQiniuToken})).data.uptoken
-      this.$apply()
-    } catch (error) {}
+  async onLoad () {
+    // console.log('------>', await Qiniu.getQiniuToken())
   }
 
   methods = {
@@ -93,11 +86,12 @@ export default class Publish extends wepy.page {
             userid: wepy.userInfo.userid,
             title: this.title,
             content: this.content,
-            img1: this.imageList[0],
-            img2: '',
-            img3: ''
+            img1: this.imageList[0] || '',
+            img2: this.imageList[1] || '',
+            img3: this.imageList[2] || ''
           }
         })
+        wepy.navigateBack()
       } catch (error) {
         console.log('------>', error)
       }
@@ -113,7 +107,8 @@ export default class Publish extends wepy.page {
           sizeType: ['compressed'],
           sourceType: ['album', 'camera']
         })).tempFilePaths
-        this.imageList = this.imageList.concat(image)
+        let url = await Qiniu.uploadImage(image)
+        this.imageList = this.imageList.concat(url)
         this.$apply()
       } catch (error) {}
     },
