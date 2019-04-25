@@ -1,0 +1,138 @@
+// 实在是不想写了。。。。。。。
+<template>
+  <view>
+    <view 
+      class="c-fm-card"
+      wx:for="{{card}}"
+      @tap="goPage({{item.tiezi_id}})"
+      wx:key="{{item.tiezi_id}}">
+      <view class="fm-cd-warp">
+        <view class="cd-content">
+          <view class="cd-title fs-32 omit-two">
+            {{item.title}}
+          </view>
+          <view class="content-info fs-26 omit-two">
+            {{item.content}}
+          </view>
+        </view>
+        <image wx:if="{{item.img1}}" mode="aspectFill" class="cd-cover-image" src="{{item.img1}}" />
+      </view>
+      <view class="cd-foot fs-22">
+        <text>{{item.time}}更新</text>
+        <view>
+          <text>{{item.comment_num}}评论</text>
+          <text class="look">{{item.good_num}}点赞</text>
+        </view>
+      </view>
+    </view>
+    <view class="no-more">没有更多了~</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import router from '@/config/routes.js'
+import ForumCard from '../../components/forumCard'
+
+export default class Tiezi extends wepy.page {
+  config = {
+    navigationBarTitleText: '帖子'
+  }
+  components = {
+    ForumCard
+  }
+  data = {
+    card: []
+  }
+  onLoad (query) {
+    query.type === 'essence'
+    ? this.getEssence()
+    : this.getTiezi()
+  }
+  async getEssence () {
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.getMyEssence,
+        data: {
+          userid: wepy.userInfo.userid
+        }
+      })
+      this.card = res.data.mytiezi
+      this.$apply()
+    } catch (error) {
+      console.log('------>', error)
+    }
+  }
+
+  async getTiezi () {
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.getMyTiezi,
+        data: {
+          userid: wepy.userInfo.userid
+        }
+      })
+      this.card = res.data.mytiezi
+      this.$apply()
+    } catch (error) {
+      console.log('------>', error)
+    }
+  }
+
+  methods = {
+    goPage (id) {
+      wepy.navigateTo({url: `${router.article}?newid=${id}`})
+    }
+  }
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+page {
+  background-color: #f5f3fa;
+}
+.c-fm-card {
+  width: 750rpx;
+  min-width: 100rpx;
+  margin-top: 10rpx;
+  background-color: #fff;
+  padding: 20rpx 40rpx;
+  box-sizing: border-box;
+}
+.fm-cd-warp {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30rpx;
+  .cd-content {
+    flex: 1;
+  }
+  .cd-title {
+    font-weight: bold;
+    .text-top {
+      color: #f83a43;
+      margin-right: 5rpx;
+    }
+  }
+  .content-info {
+    color: #a9a9a9;
+    margin-top: 30rpx;
+  }
+  .cd-cover-image {
+    width: 240rpx;
+    height: 180rpx;
+    background-color: #ccc;
+    margin-left: 5rpx;
+    border-radius: 6rpx;
+  }
+}
+.cd-foot {
+  margin-top: 40rpx;
+  color: #a9a9a9;
+  display: flex;
+  justify-content: space-between;
+  .look {
+    margin-left: 40rpx;
+  }
+}
+</style>

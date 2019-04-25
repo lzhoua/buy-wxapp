@@ -1,6 +1,8 @@
 const routers = {
   search: '/pages/search/search', // 搜索页面
   authorization: '/pages/authorization/authorization',
+  tieziMag: '/pages/tieziMag/tieziMag',
+  tiezi: '/pages/tiezi/tiezi',
   index: '/pages/index/index', // 现场回顾
   forum: '/pages/forum/forum', // 社区
   games: '/pages/games/games', // 游戏

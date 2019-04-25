@@ -16,9 +16,9 @@
         <image class="do-icon" src="/assets/image/reply-icon.png" /> 
         评论
       </view>
-      <view @tap="goodSelect" id="{{item.id}}" class="do-item">
-        <image class="do-icon" src="{{good !== item.id ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" /> 
-        {{item.good_num + goodNum}}
+      <view @tap="goodSelect({{item.id}})" class="do-item">
+        <image class="do-icon" src="{{item.isgood_forcomment * 1 !== 1 ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" /> 
+        {{item.good_num}}
       </view>
     </view>
 
@@ -43,22 +43,17 @@ export default class Reply extends wepy.component {
   props = {
     item: Object
   }
-  data = {
-    good: false,
-    goodNum: 0
-  }
-  onLoad () {
-    console.log('------>', this.item)
-  }
+  data = {}
+  onLoad () {}
 
   // 点赞
-  async postGood (id, userId) {
+  async postGood (id) {
     try {
       await wepy.fetch({
         ...wepy.$api.setGoodComment,
         data: {
           maincomment_id: id,
-          make_good_man: userId
+          make_good_man: wepy.userInfo.userid
         }
       })
     } catch (error) {
@@ -66,13 +61,26 @@ export default class Reply extends wepy.component {
     }
   }
   methods = {
-    goodSelect (e) {
-      console.log('------>', e.currentTarget.id)
-      this.good = e.currentTarget.id * 1
+    goodSelect (id) {
+      // 写的很乱很快，懒得登录判断封装在接口了，直接乱写吧
+      if (!wepy.userInfo) {
+        wepy.navigateTo({url: router.authorization})
+        return
+      }
+      if (this.item.isgood_forcomment) {
+        this.item.isgood_forcomment = 0
+        this.item.good_num = this.item.good_num - 1
+      } else {
+        this.item.isgood_forcomment = 1
+        this.item.good_num = this.item.good_num + 1
+      }
+      this.postGood(id)
+      this.$apply()
     },
     goPage (e) {
       if (!wepy.userInfo) {
         wepy.navigateTo({url: router.authorization})
+        return
       }
       const data = e.currentTarget.dataset
       const obj = {

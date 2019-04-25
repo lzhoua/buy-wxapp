@@ -57,7 +57,10 @@
       </view>
 
       <view class="todo-box fs-18">
-        <image class="put-icon" src="{{true ? '/assets/image/colect-active.png' : '/assets/image/colect.png'}}"/>
+        <image
+          @tap="onCollect"
+          class="put-icon" 
+          src="{{article.iscollect_forTiezi ? '/assets/image/colect-active.png' : '/assets/image/colect.png'}}"/>
         收藏
       </view>
       <view class="todo-box fs-18">
@@ -100,6 +103,7 @@ export default class Article extends wepy.page {
       let res = await wepy.fetch({
         ...wepy.$api.newsDetail,
         data: {
+          userid: wepy.userInfo.userid,
           id
         }
       })
@@ -117,6 +121,21 @@ export default class Article extends wepy.page {
       this.$apply()
     } catch (error) {
 
+    }
+  }
+
+  async PostCollect () {
+    let userid = wepy.userInfo.userid
+    try {
+      await wepy.fetch({
+        ...wepy.$api.collectTiezi,
+        data: {
+          collector: userid,
+          tiezi_id: this.article.tiezi_id
+        }
+      })
+    } catch (error) {
+      console.log('------>', '收藏失败')
     }
   }
 
@@ -143,6 +162,15 @@ export default class Article extends wepy.page {
       })
       params = params.slice(0, -2)
       wepy.navigateTo({url: `${router.reply}?${params}`})
+    },
+    onCollect() {
+      if (this.article.iscollect_forTiezi === 0) {
+        this.article.iscollect_forTiezi = 1
+      } else {
+        this.article.iscollect_forTiezi = 0
+      }
+      // TODO:懒得做假收藏了,直接接口
+      this.PostCollect()
     }
   }
   watch = {}

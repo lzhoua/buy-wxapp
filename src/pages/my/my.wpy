@@ -6,16 +6,16 @@
         @tap="goLogin"
         src="{{ user ? user.avatarUrl : '/assets/image/icon_avatar.png' }}"/>
       <view class="my-nickname fs-30 omit-one">{{ user.nickName || '未登录，点击头像登录' }}</view>
-      <view class="my-tie-box" @tap="goPage">
-        <view class="tie-item" data-url="">
-          <text class="fs-32 tie-num">{{user.essence_num || 0}}</text>
+      <view class="my-tie-box">
+        <view class="tie-item"  @tap="goPage" data-url="/pages/tiezi/tiezi?type=tiezi">
+          <text class="fs-32 tie-num">{{user.open_num || 0}}</text>
           <text class="fs-24 tie-type">发帖</text>
         </view>
-        <view class="tie-item" data-url="">
-          <text class="fs-32 tie-num">{{user.open_num || 0}}</text>
+        <view class="tie-item"  @tap="goPage" data-url="/pages/tiezi/tiezi?type=essence">
+          <text class="fs-32 tie-num">{{user.essence_num || 0}}</text>
           <text class="fs-24 tie-type">精华</text>
         </view>
-        <view class="tie-item" data-url="">
+        <view class="tie-item"  @tap="goPage" data-url="/pages/tieziMag/tieziMag">
           <text class="fs-32 tie-num">{{user.not_read_num || 0}}</text>
           <text class="fs-24 tie-type">消息</text>
         </view>
@@ -43,8 +43,12 @@
 <script>
 import wepy from 'wepy'
 import router from '@/config/routes.js'
+import { login } from '@/utils/login.js'
 
 export default class My extends wepy.page {
+  config = {
+    navigationBarTitleText: '我的'
+  }
   data = {
     user: void 0,
     navList: [
@@ -72,10 +76,12 @@ export default class My extends wepy.page {
     this.user = wepy.userInfo && wepy.userInfo
   }
   onShow () {
+    login(false)
     this.user = wepy.userInfo && wepy.userInfo
   }
   methods = {
     goPage (e) {
+      console.log(e)
       if (!wepy.userInfo) {
         wepy.navigateTo({url: router.authorization})
       } else {

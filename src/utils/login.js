@@ -1,24 +1,24 @@
 import wepy from 'wepy'
 
-function getSetting() {
+function getSetting(loading) {
   return new Promise((resolve) => {
     wepy.getSetting()
       .then((res) => {
         wepy.hideLoading()
         if (res.authSetting['scope.userInfo']) {
-          wepy.showLoading({ // eslint-disable-line
+          loading ? wepy.showLoading({ // eslint-disable-line
             title: '登录中',
             mask: true
-          })
+          }) : null
         }
         resolve()
       })
   })
 }
 
-export async function login () {
+export async function login (loading = true) {
   try {
-    await getSetting()
+    await getSetting(loading)
     const token = (await wepy.getStorage({key: 'token'})).data
     wepy.fetch({
       ...wepy.$api.loginToken,

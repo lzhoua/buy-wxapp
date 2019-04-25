@@ -21,7 +21,7 @@
       <block wx:for="{{swiper}}"
              wx:key="{{index}}">
         <swiper-item class="fm-swiper-item">
-          <image src="{{item.imagUrl}}"/>
+          <image @tap="onclickSwiper({{item.id}})" src="{{item.imagUrl}}"/>
         </swiper-item>
       </block>
     </swiper>
@@ -107,6 +107,7 @@ export default class Forum extends wepy.page {
           id: item.tiezi_data.tiezi_id
         }
         this.swiper.push(obj)
+        console.log('------>', this.swiper)
       })
       this.$apply()
     } catch (error) {
@@ -141,6 +142,9 @@ export default class Forum extends wepy.page {
   }
 
   methods = {
+    onclickSwiper (id) {
+      wepy.navigateTo({url: `${router.article}?newid=${id}`})
+    },
     bindconfirm () {
       wepy.Alert.loading('搜索中')
       wepy.navigateTo({url: `${wepy.router.search}?keyword=${this.keyword}`})

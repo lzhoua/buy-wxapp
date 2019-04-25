@@ -22,7 +22,9 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/forum/forum',
+      'pages/tieziMag/tieziMag',
       'pages/search/search',
+      'pages/tiezi/tiezi',
       'pages/myComment/myComment',
       'pages/authorization/authorization',
       'pages/singPage/singPage',

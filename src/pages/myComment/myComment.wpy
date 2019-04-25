@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view wx:if="{{true}}" class="no-data">没有评论</view>
+    <view wx:if="{{!card.length}}" class="no-data">没有评论</view>
     <block wx:else>
       <repeat
         for="{{card}}"

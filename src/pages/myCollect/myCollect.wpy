@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view wx:if="{{true}}" class="no-data">没有收藏</view>
+    <view wx:if="{{!card.length}}" class="no-data">没有收藏</view>
     <block wx:else>
       <repeat
         for="{{card}}"
@@ -51,6 +51,7 @@ export default class myCollect extends wepy.page {
           userid: wepy.userInfo.userid
         }
       })
+      console.log('--res.data---->', res.data.index_news)
       this.card = res.data.index_news
       this.$apply()
     } catch (error) {}

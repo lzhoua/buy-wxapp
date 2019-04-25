@@ -22,7 +22,7 @@ const api = {
   wxlogin: createApi('/user/getuser/', 'POST', false), // 首次登录
   loginToken: createApi('/user/gomine/', 'POST', false), // 登录
   writeNews: createApi('/news/write_news/', 'POST', false), // 发布帖子
-  newsDetail: createApi('/news/show_detail/', 'GET', false), // 帖子详情
+  newsDetail: createApi('/news/show_detail/', 'POST', false), // 帖子详情
   sideComment: createApi('/news/side_comment/', 'POST', false), // 副评论
   mainComment: createApi('/news/main_comment/', 'POST', false), // 主评论
   choicenessNews: createApi('/news/choiceness_news/', 'POST', false), // 精选文章
@@ -40,6 +40,9 @@ const api = {
   collectTiezi: createApi('/news/collect_tiezi/', 'POST', false), // 收藏帖子
   myCollect: createApi('/news/show_mycollect/', 'GET', false), // 我的———获取收藏帖
   getReport: createApi('/news/report/', 'GET', false), // 举报接口
+  getMyTiezi: createApi('/news/show_mytiezi/', 'GET', false), // 我的-发表过的帖子
+  getMyEssence: createApi('/news/show_myessence/', 'GET', false), // 我的-精华帖子
+  myMessage: createApi('/news/show_mynews/', 'GET', false), // 我的消息
   setGoodComment: createApi('/news/good_formiancomment/', 'POST', false) // 为主评论点赞
 }
 

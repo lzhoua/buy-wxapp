@@ -1,6 +1,17 @@
 <template>
   <view class='p-games'>
-    游戏
+    <image 
+      class="game-image"
+      mode="aspectFill"
+      src="http://img5.imgtn.bdimg.com/it/u=747327018,1674623639&fm=26&gp=0.jpg"/>
+    <image 
+      class="game-image"
+      mode="aspectFill"
+      src="http://img.zcool.cn/community/014a265a726dd7a801213466eac25f.jpg@2o.jpg"/>
+    <image 
+      class="game-image"
+      mode="aspectFill"
+      src="http://img.vipcn.com/img/20133/2013030536540277.jpg"/>
   </view>
 </template>
 
@@ -8,7 +19,7 @@
 import wepy from 'wepy'
 export default class Games extends wepy.page {
   config = {
-    navigationBarTitleText: ''
+    navigationBarTitleText: '游戏'
   }
   data = {}
   onLoad () {}
@@ -18,4 +29,17 @@ export default class Games extends wepy.page {
 </script>
 
 <style lang='scss'>
+.p-games {
+  padding: 20rpx 40rpx;
+}
+.game-image {
+  border-radius: 8rpx;
+  box-shadow: 0rpx 1rpx 15rpx -2rpx #888888;
+  overflow: hidden;
+  font-size: 0rpx;
+  position: relative;
+  margin-bottom: 30rpx;
+  width: 670rpx;
+  height: 250rpx;
+}
 </style>

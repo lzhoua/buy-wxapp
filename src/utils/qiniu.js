@@ -7,7 +7,7 @@ class Qiniu {
     if (!Qiniu.info) {
       Qiniu.info = {
         time: Date.now(),
-        token: await this._getQiniuToken()
+        qiniu: await this._getQiniuToken()
       }
     }
     if (Date.now() - Qiniu.info.time > (1000 * 60 * 60)) { // token 保存一个小时
@@ -22,8 +22,8 @@ class Qiniu {
   // 获取七牛云token
   async _getQiniuToken () {
     try {
-      this.qiniuToken = (await wepy.fetch({...wepy.$api.getQiniuToken})).data.uptoken
-      return this.qiniuToken
+      let qiniu = (await wepy.fetch({...wepy.$api.getQiniuToken})).data
+      return qiniu
     } catch (error) {}
   }
 
@@ -47,8 +47,8 @@ class Qiniu {
           console.log('error: ' + error)
         }, {
           region: 'SCN',
-          domain: 'https://bzkdlkaf.bkt.clouddn.com',
-          uptoken: Qiniu.info.token,
+          domain: `http://${Qiniu.info.qiniu.domain}`,
+          uptoken: Qiniu.info.qiniu.uptoken,
           key: `${key}.jpg`,
           // shouldUseQiniuFileName: true,
           uptokenFunc: function () {
