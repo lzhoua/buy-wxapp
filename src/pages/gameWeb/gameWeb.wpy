@@ -1,0 +1,19 @@
+<template>
+  <web-view src="https://www.baidu.com/"></web-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class gameWeb extends wepy.page {
+  config = {
+    navigationBarTitleText: ''
+  }
+  data = {}
+  onLoad () {}
+  methods = {}
+  watch = {}
+}
+</script>
+
+<style lang='scss'>
+</style>

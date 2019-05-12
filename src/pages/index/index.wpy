@@ -18,6 +18,7 @@
         <swiper-item class="idx-swiper-item">
           <image
             mode="aspectFill"
+            @tap="onClickSwiper({{item.id}})"
             src="{{item.little_img}}"
             class="{{sideIndex === index ?'slide-image slide-show' : 'slide-image'}}" />
         </swiper-item>
@@ -69,6 +70,7 @@
 
 <script>
 import wepy from 'wepy'
+import router from '@/config/routes.js'
 import ShowCard from '@/components/showCard'
 
 export default class Index extends wepy.page {
@@ -103,20 +105,6 @@ export default class Index extends wepy.page {
     } catch (error) {}
   }
 
-  // 获取所有演唱会
-  // async getAllShow () {
-  //   wepy.Alert.loading()
-  //   try {
-  //     const res = await wepy.fetch({
-  //       ...wepy.$api.vocalAll
-  //     })
-  //     this.showCards = res.data.data
-  //     this.$apply()
-  //   } catch (error) {
-  //     wepy.Alert.error('获取演唱会失败')
-  //   }
-  // }
-
   // 获取演唱会轮播图
   async getShowSwiper () {
     wepy.Alert.loading()
@@ -148,6 +136,10 @@ export default class Index extends wepy.page {
   }
 
   methods = {
+    onClickSwiper (id) {
+      console.log('------>', id)
+      wepy.navigateTo({url: `${router.singPage}?id=${id}`})
+    },
     bindStarChange(e) {
       this.starIndex = e.detail.value
       const singger = this.singgers[e.detail.value]

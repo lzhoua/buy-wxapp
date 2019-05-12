@@ -8,6 +8,7 @@
         index="index"
         item="item">
         <ForumCard
+          :newId.sync="item.tiezi_data.tiezi_id"
           :creatTime.sync="item.tiezi_data.time"
           :avatorUrl.sync="item.user.avatarUrl"
           :nickName.sync="item.user.nickName"

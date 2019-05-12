@@ -254,13 +254,13 @@ page {
     }
   }
   .fa-tie {
-    width: 40rpx;
-    height: 40rpx;
+    width: 50rpx;
+    height: 50rpx;
     padding: 20rpx;
     border-radius: 50%;
     background-color: #6257f2;
     position: fixed;
-    bottom: 30rpx;
+    bottom: 35rpx;
     right: 30rpx;
   }
 }

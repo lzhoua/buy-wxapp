@@ -2,21 +2,21 @@
   <view class='p-tiezimag'>
     <view class="p-box"
       wx:for="{{message}}"
-      @tap="goPage({{item.tiezi_id}})"
+      @tap="goPage({{index}})"
       wx:key="{{item.tiezi_id}}">
       <image class="p-avator" src="{{item.avatarUrl}}"/>
       <view class="p-content">
         <view wx:if="{{item.type === 3}}" class="fs-30 c-content-title">
           <text class="user-name omit-one">{{item.username}}</text> 
-          回答了问题
+          <text wx:if="{{item.ismany * 1 > 0}}">等</text>回答了问题
         </view>
         <view wx:if="{{item.type === 2}}" class="fs-30 c-content-title">
           <text class="user-name omit-one">{{item.username}}</text> 
-          点赞了你的评论
+          <text wx:if="{{item.ismany * 1 > 0}}">等</text>点赞了你的评论
         </view>
         <view wx:if="{{item.type === 1}}" class="fs-30 c-content-title">
           <text class="user-name omit-one">{{item.username}}</text> 
-          点赞了你的帖子
+          <text wx:if="{{item.ismany * 1 > 0}}">等</text>点赞了你的帖子
         </view>
         <view wx:if="{{item.content}}" class="fs-30 c-content omit-two">{{item.content}}</view>
         <!-- <view class="fs-26 c-content-time">10个月前</view> -->
@@ -49,8 +49,13 @@ export default class tieziMag extends wepy.page {
     } catch (error) {}
   }
   methods = {
-    goPage(id) {
-      wepy.navigateTo({url: `${router.article}?newid=${id}`})
+    goPage(idx) {
+      const {
+        tiezi_id: id,
+        tablename,
+        main_comment_id: commentId
+      } = this.message[idx]
+      wepy.navigateTo({url: `${router.article}?type=mag&newid=${id}&tablename=${tablename}&mainCommentId=${commentId}`})
     }
   }
   watch = {}

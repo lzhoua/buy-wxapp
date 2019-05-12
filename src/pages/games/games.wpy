@@ -3,6 +3,7 @@
     <image 
       class="game-image"
       mode="aspectFill"
+      @tap="goWebview"
       src="http://img5.imgtn.bdimg.com/it/u=747327018,1674623639&fm=26&gp=0.jpg"/>
     <image 
       class="game-image"
@@ -23,7 +24,13 @@ export default class Games extends wepy.page {
   }
   data = {}
   onLoad () {}
-  methods = {}
+  methods = {
+    goWebview () {
+      wepy.navigateTo({
+        url: '/pages/gameWeb/gameWeb'
+      })
+    }
+  }
   watch = {}
 }
 </script>

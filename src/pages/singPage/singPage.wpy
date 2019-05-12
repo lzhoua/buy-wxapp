@@ -29,7 +29,7 @@
 import wepy from 'wepy'
 export default class SingPage extends wepy.page {
   config = {
-    navigationBarTitleText: 'xxx演唱会'
+    navigationBarTitleText: ''
   }
   data = {
     sideIndex: 0, // swiper 当前index

@@ -25,6 +25,7 @@ const api = {
   newsDetail: createApi('/news/show_detail/', 'POST', false), // 帖子详情
   sideComment: createApi('/news/side_comment/', 'POST', false), // 副评论
   mainComment: createApi('/news/main_comment/', 'POST', false), // 主评论
+  goodForTiezi: createApi('/news/good_fortiezi/', 'POST', false), // 为帖子点赞
   choicenessNews: createApi('/news/choiceness_news/', 'POST', false), // 精选文章
   swipperNews: createApi('/news/swipper_news/', 'GET', false), // 轮播图帖子数据
   searchNews: createApi('/news/search_news/', 'GET', false), // 社区首页搜索
@@ -40,6 +41,7 @@ const api = {
   collectTiezi: createApi('/news/collect_tiezi/', 'POST', false), // 收藏帖子
   myCollect: createApi('/news/show_mycollect/', 'GET', false), // 我的———获取收藏帖
   getReport: createApi('/news/report/', 'GET', false), // 举报接口
+  readMag: createApi('/news/read_show_detail/', 'POST', false), // 读取消息
   getMyTiezi: createApi('/news/show_mytiezi/', 'GET', false), // 我的-发表过的帖子
   getMyEssence: createApi('/news/show_myessence/', 'GET', false), // 我的-精华帖子
   myMessage: createApi('/news/show_mynews/', 'GET', false), // 我的消息

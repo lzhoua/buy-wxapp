@@ -23,6 +23,10 @@
         </view>
         <view class="article-foot">
           <view>{{article.time}}更新</view>
+          <view class="good-box" @tap="goodforTiezi">
+            <image class="good-icon" src="{{article.isgood_forTiezi * 1 === 0 ? '/assets/image/good.png' : '/assets/image/good-active.png'}}" />
+            点赞
+          </view>
         </view>
       </view>
     </view>
@@ -89,12 +93,59 @@ export default class Article extends wepy.page {
   }
 
   onLoad (query) {
-    this.getArticle(query.newid)
+    console.log('---query.type--->', query)
+    if (query.type === 'mag') {
+      this.getArticleFromMag(query.newid, query.tablename, query.mainCommentId)
+    } else {
+      this.getArticle(query.newid)
+    }
   }
 
   onShow () {
     if (this.newid) {
       this.getArticle(this.newid)
+    }
+  }
+
+  async getGoodForTiezi () {
+    try {
+      await wepy.fetch({
+        ...wepy.$api.goodForTiezi,
+        data: {
+          make_good_man: wepy.userInfo.userid,
+          tiezi_id: this.article.tiezi_id
+        }
+      })
+    } catch (error) {
+      console.log('------>', error)
+    }
+  }
+
+  async getArticleFromMag (id, tablename, mainCommentId) {
+    try {
+      let res = await wepy.fetch({
+        ...wepy.$api.readMag,
+        data: {
+          tiezi_id: id,
+          userid: wepy.userInfo.userid,
+          tablename,
+          main_comment_id: mainCommentId
+        }
+      })
+      console.log('---1--->', res.data.data.tiezi_data)
+      let data = res.data.data.tiezi_data
+      this.newid = id
+      this.article = data
+      let arr = []
+      Object.keys(data).map(key => {
+        if (key.search(/img/g) !== -1 && data[key].length) {
+          arr.push(data[key])
+        }
+      })
+      this.imageList = arr
+      this.$apply()
+    } catch (error) {
+
     }
   }
 
@@ -107,7 +158,7 @@ export default class Article extends wepy.page {
           id
         }
       })
-      console.log('------>', res.data.data.tiezi_data)
+      console.log('---2--->', res.data.data.tiezi_data)
       let data = res.data.data.tiezi_data
       this.newid = id
       this.article = data
@@ -140,6 +191,16 @@ export default class Article extends wepy.page {
   }
 
   methods = {
+    goodforTiezi (e) {
+      console.log('------>', e)
+      if (this.article.isgood_forTiezi === 0) {
+        this.article.isgood_forTiezi = 1
+      } else {
+        this.article.isgood_forTiezi = 0
+      }
+      this.getGoodForTiezi()
+      this.$apply()
+    },
     showImage (e) {
       wx.previewImage({
         current: e.target.dataset.url, // 当前显示图片的http链接
@@ -222,6 +283,15 @@ page {
     margin-top: 40rpx;
     .data-num {
       display: flex;
+    }
+    .good-box {
+      display: flex;
+      align-items: center;
+    }
+    .good-icon {
+      width: 30rpx;
+      height: 30rpx;
+      margin-right: 5rpx;
     }
   }
 }

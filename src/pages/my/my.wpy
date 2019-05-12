@@ -16,7 +16,7 @@
           <text class="fs-24 tie-type">精华</text>
         </view>
         <view class="tie-item"  @tap="goPage" data-url="/pages/tieziMag/tieziMag">
-          <text class="fs-32 tie-num">{{user.not_read_num || 0}}</text>
+          <text class="{{user.not_read_num === 0 ? 'fs-32 tie-num' : 'fs-32 tie-num red' }}">{{user.not_read_num || 0}}</text>
           <text class="fs-24 tie-type">消息</text>
         </view>
       </view>
@@ -60,13 +60,13 @@ export default class My extends wepy.page {
       },
       {
         icon: '../../assets/image/pinglun.svg',
-        title: '评论',
+        title: '我的评论',
         id: 'comment',
         url: router.myComment
       },
       {
         icon: '../../assets/image/good.svg',
-        title: '点赞',
+        title: '我的点赞',
         id: 'good',
         url: router.good
       }
@@ -137,6 +137,9 @@ page {
       justify-content: center;
       .tie-num {
         font-weight: bold;
+      }
+      .red {
+        color: red;
       }
       .tie-type {
         color: #a9a9a9;
